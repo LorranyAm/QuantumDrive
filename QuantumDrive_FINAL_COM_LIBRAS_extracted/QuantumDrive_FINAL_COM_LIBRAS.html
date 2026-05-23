@@ -15,7 +15,9 @@
       <nav class="site-nav" aria-label="Navegação principal">
         <a href="#carros">Carros</a>
         <a href="#quiz">Quiz</a>
+        <a href="#relatorios">Relatórios</a>
         <a href="#reserva">Reserva</a>
+        <a href="#tecnologias">Tecnologias</a>
         <a href="#acessibilidade">Acessibilidade</a>
       </nav>
 
@@ -44,6 +46,54 @@
         <span>Cada carro aparece com imagem real, descrição, autonomia, perfil e valor da diária.</span>
       </div>
       <div class="vehicle-grid" id="gridCarros"></div>
+    </section>
+
+    <section id="relatorios" class="section-block">
+      <div class="section-title">
+        <p class="eyebrow">Dashboard / Relatórios</p>
+        <h2>Relatórios da Plataforma</h2>
+        <span>Indicadores simulados para apoiar análise de dados, machine learning e tomada de decisão.</span>
+      </div>
+
+      <div class="metrics-grid">
+        <article class="metric-card">
+          <i class="fa-solid fa-car-side"></i>
+          <span>Veículo mais alugado</span>
+          <strong>BYD Dolphin</strong>
+          <small>28,5% das reservas</small>
+        </article>
+        <article class="metric-card">
+          <i class="fa-solid fa-calendar-check"></i>
+          <span>Quantidade de reservas</span>
+          <strong>142</strong>
+          <small>reservas simuladas no mês</small>
+        </article>
+        <article class="metric-card">
+          <i class="fa-solid fa-arrow-trend-up"></i>
+          <span>Crescimento mensal</span>
+          <strong>18,4%</strong>
+          <small>aumento de locações elétricas</small>
+        </article>
+        <article class="metric-card">
+          <i class="fa-solid fa-brain"></i>
+          <span>Previsão de demanda</span>
+          <strong>Alta</strong>
+          <small>fim de semana e feriados</small>
+        </article>
+      </div>
+
+      <div class="report-panel">
+        <div>
+          <h3>Distribuição de aluguel por veículo</h3>
+          <p>Exemplo de leitura de dados para indicar quais modelos têm maior procura.</p>
+        </div>
+        <div class="bars">
+          <div class="bar-row"><span>BYD Dolphin</span><div><b style="width: 28.5%"></b></div><strong>28,5%</strong></div>
+          <div class="bar-row"><span>Tesla Model 3</span><div><b style="width: 20.2%"></b></div><strong>20,2%</strong></div>
+          <div class="bar-row"><span>Renault Zoe</span><div><b style="width: 17.7%"></b></div><strong>17,7%</strong></div>
+          <div class="bar-row"><span>Volvo EX30</span><div><b style="width: 15.8%"></b></div><strong>15,8%</strong></div>
+        </div>
+      </div>
     </section>
 
     <section id="quiz" class="section-block">
@@ -91,6 +141,14 @@
           <label for="emailReserva">E-mail<input id="emailReserva" type="email" required></label>
           <label for="telefoneReserva">Telefone<input id="telefoneReserva" required></label>
           <label for="cpfReserva">CPF<input id="cpfReserva" required></label>
+          <label for="veiculoReserva">Veículo
+            <select id="veiculoReserva" required>
+              <option>BYD Dolphin Mini</option>
+              <option>BYD Dolphin</option>
+              <option>Volvo EX30</option>
+              <option>Tesla Model 3</option>
+            </select>
+          </label>
           <label for="dataRetirada">Data retirada<input id="dataRetirada" type="date" required></label>
           <label for="horaRetirada">Hora retirada<input id="horaRetirada" type="time" required></label>
           <label for="dataDevolucao">Data devolução<input id="dataDevolucao" type="date" required></label>
@@ -119,6 +177,51 @@
         <i class="fa-solid fa-circle-check"></i>
         <h2>Reserva confirmada!</h2>
         <p id="confirmacaoTexto">Sua reserva foi registrada com sucesso.</p>
+        <div class="receipt" id="reciboReserva"></div>
+      </div>
+    </section>
+
+    <section id="acessibilidade-info" class="section-block">
+      <div class="section-title">
+        <p class="eyebrow">Acessibilidade</p>
+        <h2>Recursos inclusivos do sistema</h2>
+        <span>O projeto considera diferentes perfis de usuário e reforça a navegação acessível.</span>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card"><i class="fa-solid fa-hands-asl-interpreting"></i><strong>VLibras</strong><span>Tradução em Libras com botão fixo no canto inferior direito.</span></article>
+        <article class="feature-card"><i class="fa-solid fa-circle-half-stroke"></i><strong>Alto contraste</strong><span>Modo visual para melhorar leitura em telas escuras.</span></article>
+        <article class="feature-card"><i class="fa-solid fa-mobile-screen"></i><strong>Responsividade</strong><span>Layout adaptado para celular, tablet e computador.</span></article>
+        <article class="feature-card"><i class="fa-solid fa-text-height"></i><strong>Fonte ajustável</strong><span>Botões A+ e A- para auxiliar a leitura.</span></article>
+      </div>
+    </section>
+
+    <section id="admin" class="section-block">
+      <div class="section-title">
+        <p class="eyebrow">Painel Administrativo</p>
+        <h2>Visão geral da operação</h2>
+        <span>Painel visual para demonstrar controle de reservas, frota, clientes e faturamento.</span>
+      </div>
+      <div class="admin-grid">
+        <article class="metric-card"><i class="fa-solid fa-clipboard-list"></i><span>Total de reservas</span><strong>142</strong><small>mês atual</small></article>
+        <article class="metric-card"><i class="fa-solid fa-car"></i><span>Veículos disponíveis</span><strong>18</strong><small>frota ativa</small></article>
+        <article class="metric-card"><i class="fa-solid fa-sack-dollar"></i><span>Faturamento</span><strong>R$ 48.920</strong><small>estimativa mensal</small></article>
+        <article class="metric-card"><i class="fa-solid fa-users"></i><span>Clientes cadastrados</span><strong>356</strong><small>base simulada</small></article>
+      </div>
+    </section>
+
+    <section id="tecnologias" class="section-block">
+      <div class="section-title">
+        <p class="eyebrow">Tecnologias Utilizadas</p>
+        <h2>Base técnica do projeto</h2>
+      </div>
+      <div class="tech-list">
+        <span>HTML5</span>
+        <span>CSS3</span>
+        <span>JavaScript</span>
+        <span>MySQL</span>
+        <span>C#</span>
+        <span>VLibras</span>
+        <span>GitHub Pages</span>
       </div>
     </section>
 
@@ -150,6 +253,8 @@
 
           <p id="loginError" class="form-error" role="alert"></p>
           <button class="btn primary full" type="submit">Entrar</button>
+          <button class="link-button recover-link" type="button" id="recoverPassword">Esqueci minha senha</button>
+          <p id="recoverMessage" class="form-success" role="status"></p>
         </form>
 
         <div class="signup-visual">
@@ -197,6 +302,7 @@
       <nav class="sidebar-nav" aria-label="Menu do usuário">
         <a href="#dashboard"><i class="fa-solid fa-chart-line"></i>Dashboard</a>
         <a href="#agenda"><i class="fa-solid fa-calendar-check"></i>Agendamentos</a>
+        <a href="#dashboard-relatorios"><i class="fa-solid fa-chart-pie"></i>Relatórios</a>
         <a href="#dados"><i class="fa-solid fa-id-card"></i>Meus Dados</a>
         <a href="#utilizados"><i class="fa-solid fa-car-side"></i>Veículos</a>
       </nav>
@@ -245,6 +351,19 @@
             <div><dt>CNH</dt><dd>04598732100</dd></div>
           </dl>
         </article>
+      </section>
+
+      <section id="dashboard-relatorios" class="section-block">
+        <div class="section-title">
+          <p class="eyebrow">Relatórios inteligentes</p>
+          <h2>Análise da plataforma</h2>
+        </div>
+        <div class="metrics-grid">
+          <article class="metric-card"><i class="fa-solid fa-car-side"></i><span>Mais alugado</span><strong>BYD Dolphin</strong><small>28,5%</small></article>
+          <article class="metric-card"><i class="fa-solid fa-chart-line"></i><span>Crescimento</span><strong>18,4%</strong><small>mensal</small></article>
+          <article class="metric-card"><i class="fa-solid fa-brain"></i><span>Previsão IA</span><strong>Alta</strong><small>próximos 7 dias</small></article>
+          <article class="metric-card"><i class="fa-solid fa-wallet"></i><span>Receita estimada</span><strong>R$ 48.920</strong><small>mês atual</small></article>
+        </div>
       </section>
 
       <section id="utilizados" class="section-block">

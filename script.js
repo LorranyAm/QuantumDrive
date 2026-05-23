@@ -48,7 +48,9 @@ const loginPanel = document.getElementById('loginPanel');
 const signupPanel = document.getElementById('signupPanel');
 const loginForm = document.getElementById('loginForm');
 const signupForm = document.getElementById('signupForm');
+const recoverPassword = document.getElementById('recoverPassword');
 const loginError = document.getElementById('loginError');
+const recoverMessage = document.getElementById('recoverMessage');
 const signupMessage = document.getElementById('signupMessage');
 const gridCarros = document.getElementById('gridCarros');
 
@@ -64,7 +66,7 @@ function criarCard(carro, extra = '') {
           <div class="spec"><strong>Perfil</strong>${carro.perfil}</div>
         </div>
         <div class="price">${carro.preco}</div>
-        <button class="btn primary" type="button" data-scroll="#reserva">Reservar este carro</button>
+        <button class="btn primary" type="button" data-scroll="#reserva" data-carro="${carro.nome}">Reservar este carro</button>
       </div>
     </article>
   `;
@@ -85,6 +87,7 @@ function mostrarAutenticacao(tipo) {
   loginPanel.hidden = tipo !== 'login';
   signupPanel.hidden = tipo !== 'signup';
   loginError.textContent = '';
+  recoverMessage.textContent = '';
   signupMessage.textContent = '';
   mostrarTela('auth');
 }
@@ -115,6 +118,12 @@ document.addEventListener('click', (event) => {
 
   if (scrollButton) {
     const target = document.querySelector(scrollButton.dataset.scroll);
+    const carroEscolhido = scrollButton.dataset.carro;
+
+    if (carroEscolhido) {
+      document.getElementById('veiculoReserva').value = carroEscolhido;
+    }
+
     if (target) {
       mostrarTela('home');
       setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 50);
@@ -145,6 +154,11 @@ loginForm.addEventListener('submit', (event) => {
   loginError.textContent = 'E-mail ou senha incorretos. Use teste@demo.com e senha 123456.';
 });
 
+recoverPassword.addEventListener('click', () => {
+  const email = document.getElementById('loginEmail').value.trim() || 'seu e-mail cadastrado';
+  recoverMessage.textContent = `Recuperação simulada enviada para ${email}.`;
+});
+
 signupForm.addEventListener('submit', (event) => {
   event.preventDefault();
   signupMessage.textContent = 'Cadastro demonstrativo criado. Entrando na sua conta...';
@@ -173,13 +187,35 @@ document.getElementById('reservaForm').addEventListener('submit', async (event) 
   event.preventDefault();
 
   const email = document.getElementById('emailReserva').value.trim();
+  const nome = document.getElementById('nomeReserva').value.trim();
+  const veiculo = document.getElementById('veiculoReserva').value;
+  const dataRetirada = document.getElementById('dataRetirada').value;
+  const horaRetirada = document.getElementById('horaRetirada').value;
+  const dataDevolucao = document.getElementById('dataDevolucao').value;
+  const horaDevolucao = document.getElementById('horaDevolucao').value;
+  const pagamento = document.getElementById('pagamento').value;
   const confirmation = document.getElementById('confirmacao');
   const confirmationText = document.getElementById('confirmacaoTexto');
+  const receipt = document.getElementById('reciboReserva');
   const result = await simularEnvioConfirmacao(email);
+  const protocolo = `QD-${Date.now().toString().slice(-6)}`;
 
   confirmation.hidden = false;
   confirmationText.textContent = result.enviado
     ? `Sua reserva foi registrada com sucesso. Uma confirmação foi preparada para o e-mail ${result.email}.`
     : 'Sua reserva foi registrada, mas não foi possível preparar a confirmação por e-mail.';
+
+  receipt.innerHTML = `
+    <h3>Recibo da reserva</h3>
+    <div class="receipt-grid">
+      <div><span>Protocolo</span><strong>${protocolo}</strong></div>
+      <div><span>Cliente</span><strong>${nome}</strong></div>
+      <div><span>Veículo</span><strong>${veiculo}</strong></div>
+      <div><span>Pagamento</span><strong>${pagamento}</strong></div>
+      <div><span>Retirada</span><strong>${dataRetirada} às ${horaRetirada}</strong></div>
+      <div><span>Devolução</span><strong>${dataDevolucao} às ${horaDevolucao}</strong></div>
+    </div>
+  `;
+
   confirmation.scrollIntoView({ behavior: 'smooth' });
 });
