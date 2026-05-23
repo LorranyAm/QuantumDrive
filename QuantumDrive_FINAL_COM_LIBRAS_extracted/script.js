@@ -3,6 +3,39 @@ const mockUser = {
   password: '123456'
 };
 
+const emailConfig = {
+  publicKey: '',
+  serviceId: '',
+  cadastroTemplateId: '',
+  reservaTemplateId: ''
+};
+
+function emailConfigurado() {
+  return Boolean(
+    emailConfig.publicKey &&
+    emailConfig.serviceId &&
+    emailConfig.cadastroTemplateId &&
+    emailConfig.reservaTemplateId &&
+    window.emailjs
+  );
+}
+
+async function enviarEmail(tipo, dados) {
+  if (!emailConfigurado()) {
+    console.info('EmailJS ainda não configurado. Confirmação simulada:', tipo, dados);
+    return { enviado: false, simulado: true };
+  }
+
+  emailjs.init({ publicKey: emailConfig.publicKey });
+
+  const templateId = tipo === 'cadastro'
+    ? emailConfig.cadastroTemplateId
+    : emailConfig.reservaTemplateId;
+
+  await emailjs.send(emailConfig.serviceId, templateId, dados);
+  return { enviado: true, simulado: false };
+}
+
 const carros = [
   {
     nome: 'BYD Dolphin Mini',
@@ -95,14 +128,6 @@ function mostrarAutenticacao(tipo) {
   mostrarTela('auth');
 }
 
-function simularEnvioConfirmacao(email) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({ enviado: true, email });
-    }, 500);
-  });
-}
-
 gridCarros.innerHTML = carros.map((carro) => criarCard(carro)).join('');
 
 function atualizarCamposCartao() {
@@ -174,13 +199,26 @@ recoverPassword.addEventListener('click', () => {
   recoverMessage.textContent = `Recuperação simulada enviada para ${email}.`;
 });
 
-signupForm.addEventListener('submit', (event) => {
+signupForm.addEventListener('submit', async (event) => {
   event.preventDefault();
-  signupMessage.textContent = 'Cadastro demonstrativo criado. Entrando na sua conta...';
+
+  const nome = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+
+  const resultadoEmail = await enviarEmail('cadastro', {
+    to_name: nome,
+    to_email: email,
+    subject: 'Confirmação de cadastro - Quantum Drive',
+    message: `Olá, ${nome}! Seu cadastro na Quantum Drive foi realizado com sucesso.`
+  });
+
+  signupMessage.textContent = resultadoEmail.enviado
+    ? `Cadastro criado. Enviamos a confirmação para ${email}.`
+    : `Cadastro criado. A confirmação por e-mail está preparada para ${email}.`;
 
   setTimeout(() => {
     mostrarTela('dashboard');
-  }, 700);
+  }, 1100);
 });
 
 document.getElementById('quizForm').addEventListener('submit', (event) => {
@@ -212,13 +250,23 @@ document.getElementById('reservaForm').addEventListener('submit', async (event) 
   const confirmation = document.getElementById('confirmacao');
   const confirmationText = document.getElementById('confirmacaoTexto');
   const receipt = document.getElementById('reciboReserva');
-  const result = await simularEnvioConfirmacao(email);
   const protocolo = `QD-${Date.now().toString().slice(-6)}`;
+  const resultadoEmail = await enviarEmail('reserva', {
+    to_name: nome,
+    to_email: email,
+    subject: 'Confirmação de reserva - Quantum Drive',
+    protocolo,
+    veiculo,
+    pagamento: formaPagamento,
+    retirada: `${dataRetirada} às ${horaRetirada}`,
+    devolucao: `${dataDevolucao} às ${horaDevolucao}`,
+    message: `Sua reserva do ${veiculo} foi confirmada. Protocolo: ${protocolo}.`
+  });
 
   confirmation.hidden = false;
-  confirmationText.textContent = result.enviado
-    ? `Sua reserva foi registrada com sucesso. Uma confirmação foi preparada para o e-mail ${result.email}.`
-    : 'Sua reserva foi registrada, mas não foi possível preparar a confirmação por e-mail.';
+  confirmationText.textContent = resultadoEmail.enviado
+    ? `Sua reserva foi registrada com sucesso. Enviamos a confirmação para ${email}.`
+    : `Sua reserva foi registrada com sucesso. A confirmação por e-mail está preparada para ${email}.`;
 
   receipt.innerHTML = `
     <h3>Recibo da reserva</h3>
