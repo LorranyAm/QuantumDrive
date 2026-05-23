@@ -4,39 +4,188 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quantum Drive</title>
-  <link rel="preconnect" href="https://images.unsplash.com">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main id="loginScreen" class="login-screen">
-    <section class="login-card" aria-labelledby="loginTitle">
+  <main id="homeScreen" class="site-screen">
+    <header class="site-header">
+      <a class="site-logo" href="#inicio">Quantum Drive</a>
+
+      <nav class="site-nav" aria-label="Navegação principal">
+        <a href="#carros">Carros</a>
+        <a href="#quiz">Quiz</a>
+        <a href="#reserva">Reserva</a>
+        <a href="#acessibilidade">Acessibilidade</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="ghost-button" type="button" data-auth="login">Login</button>
+        <button class="mini-button" type="button" data-auth="signup">Cadastrar-se</button>
+      </div>
+    </header>
+
+    <section id="inicio" class="home-hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Mobilidade elétrica</p>
+        <h1>Aluguel de carros elétricos.</h1>
+        <p>Escolha seu veículo, veja as descrições, faça o quiz inteligente e finalize sua reserva online.</p>
+        <div class="hero-actions">
+          <button class="btn primary" type="button" data-scroll="#carros">Ver veículos</button>
+          <button class="btn secondary" type="button" data-auth="login">Fazer login</button>
+        </div>
+      </div>
+      <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/2022_BYD_Seal.jpg" alt="BYD Seal elétrico">
+    </section>
+
+    <section id="carros" class="section-block">
+      <div class="section-title">
+        <p class="eyebrow">Catálogo</p>
+        <h2>Carros elétricos disponíveis</h2>
+        <span>Cada carro aparece com imagem real, descrição, autonomia, perfil e valor da diária.</span>
+      </div>
+      <div class="vehicle-grid" id="gridCarros"></div>
+    </section>
+
+    <section id="quiz" class="section-block">
+      <div class="section-title">
+        <p class="eyebrow">Quiz</p>
+        <h2>Qual carro combina com você?</h2>
+      </div>
+      <div class="panel">
+        <form id="quizForm" class="form-grid">
+          <label for="uso">Uso principal
+            <select id="uso" required>
+              <option value="">Selecione</option>
+              <option value="cidade">Cidade</option>
+              <option value="viagem">Viagem</option>
+              <option value="familia">Família</option>
+              <option value="esportivo">Esportivo</option>
+            </select>
+          </label>
+
+          <label for="prioridade">Prioridade
+            <select id="prioridade" required>
+              <option value="">Selecione</option>
+              <option value="economia">Economia</option>
+              <option value="conforto">Conforto</option>
+              <option value="autonomia">Autonomia</option>
+              <option value="performance">Performance</option>
+            </select>
+          </label>
+
+          <button class="btn primary" type="submit">Ver recomendação</button>
+        </form>
+        <div id="quizResultado" class="result-area"></div>
+      </div>
+    </section>
+
+    <section id="reserva" class="section-block">
+      <div class="section-title">
+        <p class="eyebrow">Reserva</p>
+        <h2>Finalizar reserva</h2>
+      </div>
+
+      <div class="panel">
+        <form id="reservaForm" class="form-grid">
+          <label for="nomeReserva">Nome completo<input id="nomeReserva" required></label>
+          <label for="emailReserva">E-mail<input id="emailReserva" type="email" required></label>
+          <label for="telefoneReserva">Telefone<input id="telefoneReserva" required></label>
+          <label for="cpfReserva">CPF<input id="cpfReserva" required></label>
+          <label for="dataRetirada">Data retirada<input id="dataRetirada" type="date" required></label>
+          <label for="horaRetirada">Hora retirada<input id="horaRetirada" type="time" required></label>
+          <label for="dataDevolucao">Data devolução<input id="dataDevolucao" type="date" required></label>
+          <label for="horaDevolucao">Hora devolução<input id="horaDevolucao" type="time" required></label>
+
+          <label for="pagamento">Forma de pagamento
+            <select id="pagamento" required>
+              <option>Pix</option>
+              <option>Cartão de crédito</option>
+              <option>Cartão de débito</option>
+              <option>Pagamento na loja</option>
+            </select>
+          </label>
+
+          <label for="cnh">CNH<input id="cnh" type="file" required></label>
+          <label for="rg">RG<input id="rg" type="file" required></label>
+          <label for="comprovante">Comprovante de residencia<input id="comprovante" type="file" required></label>
+
+          <button class="btn primary" type="submit">Confirmar reserva</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="confirmacao" class="section-block confirmation-section" hidden>
+      <div class="confirmation-card">
+        <i class="fa-solid fa-circle-check"></i>
+        <h2>Reserva confirmada!</h2>
+        <p id="confirmacaoTexto">Sua reserva foi registrada com sucesso.</p>
+      </div>
+    </section>
+
+    <footer>Quantum Drive - Aluguel inteligente de carros elétricos.</footer>
+  </main>
+
+  <main id="authScreen" class="login-screen" hidden>
+    <button class="back-home" type="button" data-screen="home">
+      <i class="fa-solid fa-arrow-left"></i>
+      Voltar ao início
+    </button>
+
+    <section class="login-card" aria-labelledby="authTitle">
       <div class="brand-mark">
         <i class="fa-solid fa-bolt"></i>
       </div>
       <p class="eyebrow">Quantum Drive</p>
-      <h1 id="loginTitle">Acesse sua conta</h1>
-      <p class="login-subtitle">Entre para acompanhar reservas, dados e veículos utilizados.</p>
 
-      <form id="loginForm" class="login-form">
-        <label for="loginEmail">E-mail</label>
-        <input id="loginEmail" name="email" type="email" autocomplete="email" placeholder="seuemail@exemplo.com" required>
+      <div id="loginPanel">
+        <h1 id="authTitle">Acesse sua conta</h1>
+        <p class="login-subtitle">Entre para acompanhar reservas, dados e veículos utilizados.</p>
 
-        <label for="loginPassword">Senha</label>
-        <input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="Digite sua senha" required>
+        <form id="loginForm" class="login-form">
+          <label for="loginEmail">E-mail</label>
+          <input id="loginEmail" name="email" type="email" autocomplete="email" placeholder="teste@demo.com" required>
 
-        <p id="loginError" class="form-error" role="alert"></p>
-        <button class="btn primary full" type="submit">Entrar</button>
-      </form>
+          <label for="loginPassword">Senha</label>
+          <input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="123456" required>
 
-      <div class="signup-visual">
-        <span>Não possui conta?</span>
-        <button type="button" class="link-button">Cadastrar-se</button>
+          <p id="loginError" class="form-error" role="alert"></p>
+          <button class="btn primary full" type="submit">Entrar</button>
+        </form>
+
+        <div class="signup-visual">
+          <span>Não possui conta?</span>
+          <button type="button" class="link-button" data-auth="signup">Cadastrar-se</button>
+        </div>
+      </div>
+
+      <div id="signupPanel" hidden>
+        <h1>Criar cadastro</h1>
+        <p class="login-subtitle">Cadastro demonstrativo para visualizar a experiência do cliente.</p>
+
+        <form id="signupForm" class="login-form">
+          <label for="signupName">Nome completo</label>
+          <input id="signupName" type="text" placeholder="Seu nome" required>
+
+          <label for="signupEmail">E-mail</label>
+          <input id="signupEmail" type="email" placeholder="seuemail@exemplo.com" required>
+
+          <label for="signupPassword">Senha</label>
+          <input id="signupPassword" type="password" placeholder="Crie uma senha" required>
+
+          <p id="signupMessage" class="form-success" role="status"></p>
+          <button class="btn primary full" type="submit">Cadastrar-se</button>
+        </form>
+
+        <div class="signup-visual">
+          <span>Já possui conta?</span>
+          <button type="button" class="link-button" data-auth="login">Entrar</button>
+        </div>
       </div>
     </section>
   </main>
 
-  <div id="appScreen" class="app-shell" hidden>
+  <main id="dashboardScreen" class="app-shell" hidden>
     <aside class="sidebar">
       <div class="sidebar-profile">
         <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=160&q=80" alt="Foto do usuário">
@@ -48,9 +197,9 @@
 
       <nav class="sidebar-nav" aria-label="Menu do usuário">
         <a href="#dashboard"><i class="fa-solid fa-chart-line"></i>Dashboard</a>
-        <a href="#reserva"><i class="fa-solid fa-calendar-check"></i>Agendamentos</a>
+        <a href="#agenda"><i class="fa-solid fa-calendar-check"></i>Agendamentos</a>
         <a href="#dados"><i class="fa-solid fa-id-card"></i>Meus Dados</a>
-        <a href="#carros"><i class="fa-solid fa-car-side"></i>Veículos</a>
+        <a href="#utilizados"><i class="fa-solid fa-car-side"></i>Veículos</a>
       </nav>
     </aside>
 
@@ -60,15 +209,11 @@
           <p class="eyebrow">Painel do usuário</p>
           <h2>Quantum Drive</h2>
         </div>
-        <nav class="topbar-links" aria-label="Navegação principal">
-          <a href="#carros">Carros</a>
-          <a href="#quiz">Quiz</a>
-          <a href="#reserva">Reserva</a>
-        </nav>
+        <button class="ghost-button" type="button" data-screen="home">Sair</button>
       </header>
 
       <section id="dashboard" class="dashboard-grid section-block">
-        <article class="panel pending-card">
+        <article id="agenda" class="panel pending-card">
           <div class="panel-heading">
             <div>
               <p class="eyebrow">Agendamento pendente</p>
@@ -77,14 +222,8 @@
             <span class="status-badge">Aguardando retirada</span>
           </div>
           <dl class="details-list">
-            <div>
-              <dt>Veículo</dt>
-              <dd>Tesla Model 3</dd>
-            </div>
-            <div>
-              <dt>Data</dt>
-              <dd>28/05/2026</dd>
-            </div>
+            <div><dt>Veículo</dt><dd>Tesla Model 3</dd></div>
+            <div><dt>Data</dt><dd>28/05/2026</dd></div>
           </dl>
         </article>
 
@@ -116,118 +255,21 @@
         </div>
         <div class="used-grid">
           <article class="used-card">
-            <img src="https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=900&q=80" alt="Tesla Model 3">
+            <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Tesla_Model_3_parked,_front_driver_side.jpg" alt="Tesla Model 3">
             <div><h3>Tesla Model 3</h3><span>5x utilizado</span></div>
           </article>
           <article class="used-card">
-            <img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=900&q=80" alt="BYD Dolphin">
+            <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/2021_BYD_Dolphin_EV_(front).jpg" alt="BYD Dolphin">
             <div><h3>BYD Dolphin</h3><span>2x utilizado</span></div>
           </article>
           <article class="used-card">
-            <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=900&q=80" alt="BMW i4">
+            <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/BMW_i4_IMG_7450.jpg" alt="BMW i4">
             <div><h3>BMW i4</h3><span>3x utilizado</span></div>
           </article>
         </div>
       </section>
-
-      <section class="hero section-block">
-        <div>
-          <p class="eyebrow">Mobilidade elétrica</p>
-          <h1>Aluguel de carros elétricos.</h1>
-          <p>Escolha seu veículo, veja as descrições, faça o quiz inteligente e finalize sua reserva online.</p>
-          <button class="btn primary" type="button" data-scroll="#carros">Ver veículos</button>
-        </div>
-        <img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=1200&q=80" alt="Carro elétrico moderno">
-      </section>
-
-      <section id="carros" class="section-block">
-        <div class="section-title">
-          <p class="eyebrow">Catálogo</p>
-          <h2>Carros elétricos disponíveis</h2>
-          <span>Cada carro aparece com imagem, descrição, autonomia, perfil e valor da diária.</span>
-        </div>
-        <div class="vehicle-grid" id="gridCarros"></div>
-      </section>
-
-      <section id="quiz" class="section-block">
-        <div class="section-title">
-          <p class="eyebrow">Quiz</p>
-          <h2>Qual carro combina com você?</h2>
-        </div>
-        <div class="panel">
-          <form id="quizForm" class="form-grid">
-            <label for="uso">Uso principal
-              <select id="uso" required>
-                <option value="">Selecione</option>
-                <option value="cidade">Cidade</option>
-                <option value="viagem">Viagem</option>
-                <option value="familia">Família</option>
-                <option value="esportivo">Esportivo</option>
-              </select>
-            </label>
-
-            <label for="prioridade">Prioridade
-              <select id="prioridade" required>
-                <option value="">Selecione</option>
-                <option value="economia">Economia</option>
-                <option value="conforto">Conforto</option>
-                <option value="autonomia">Autonomia</option>
-                <option value="performance">Performance</option>
-              </select>
-            </label>
-
-            <button class="btn primary" type="submit">Ver recomendação</button>
-          </form>
-          <div id="quizResultado" class="result-area"></div>
-        </div>
-      </section>
-
-      <section id="reserva" class="section-block">
-        <div class="section-title">
-          <p class="eyebrow">Reserva</p>
-          <h2>Finalizar reserva</h2>
-        </div>
-
-        <div class="panel">
-          <form id="reservaForm" class="form-grid">
-            <label for="nomeReserva">Nome completo<input id="nomeReserva" required></label>
-            <label for="emailReserva">E-mail<input id="emailReserva" type="email" required></label>
-            <label for="telefoneReserva">Telefone<input id="telefoneReserva" required></label>
-            <label for="cpfReserva">CPF<input id="cpfReserva" required></label>
-            <label for="dataRetirada">Data retirada<input id="dataRetirada" type="date" required></label>
-            <label for="horaRetirada">Hora retirada<input id="horaRetirada" type="time" required></label>
-            <label for="dataDevolucao">Data devolução<input id="dataDevolucao" type="date" required></label>
-            <label for="horaDevolucao">Hora devolução<input id="horaDevolucao" type="time" required></label>
-
-            <label for="pagamento">Forma de pagamento
-              <select id="pagamento" required>
-                <option>Pix</option>
-                <option>Cartão de crédito</option>
-                <option>Cartão de débito</option>
-                <option>Pagamento na loja</option>
-              </select>
-            </label>
-
-            <label for="cnh">CNH<input id="cnh" type="file" required></label>
-            <label for="rg">RG<input id="rg" type="file" required></label>
-            <label for="comprovante">Comprovante de residencia<input id="comprovante" type="file" required></label>
-
-            <button class="btn primary" type="submit">Confirmar reserva</button>
-          </form>
-        </div>
-      </section>
-
-      <section id="confirmacao" class="section-block confirmation-section" hidden>
-        <div class="confirmation-card">
-          <i class="fa-solid fa-circle-check"></i>
-          <h2>Reserva confirmada!</h2>
-          <p id="confirmacaoTexto">Sua reserva foi registrada com sucesso.</p>
-        </div>
-      </section>
-
-      <footer>Quantum Drive - Aluguel inteligente de carros elétricos.</footer>
     </div>
-  </div>
+  </main>
 
   <div class="accessibility-tools" id="acessibilidade">
     <button type="button" data-action="daltonico">Modo daltônico</button>

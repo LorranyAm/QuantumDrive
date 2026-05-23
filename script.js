@@ -6,7 +6,7 @@ const mockUser = {
 const carros = [
   {
     nome: 'BYD Dolphin Mini',
-    imagem: 'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=900&q=80',
+    imagem: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/BYD_DOLPHIN_MINI_(BRAZIL)_BYD_SEAGULL.jpg',
     desc: 'Compacto 100% elétrico, econômico e ideal para uso urbano, trajetos curtos e estacionamento fácil.',
     autonomia: 'até 280 km',
     perfil: 'Cidade / Econômico',
@@ -14,7 +14,7 @@ const carros = [
   },
   {
     nome: 'BYD Dolphin',
-    imagem: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=900&q=80',
+    imagem: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/2021_BYD_Dolphin_EV_(front).jpg',
     desc: 'Hatch elétrico moderno, confortável e prático para casal, trabalho e viagens curtas.',
     autonomia: 'até 291 km',
     perfil: 'Confortável',
@@ -22,7 +22,7 @@ const carros = [
   },
   {
     nome: 'Volvo EX30',
-    imagem: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=900&q=80',
+    imagem: 'https://media-downloads.volvocars.com/14919fa0-a885-4a45-9464-b3840084b167/353329_1_5.jpg',
     desc: 'SUV compacto premium com ótimo acabamento, tecnologia embarcada e condução suave.',
     autonomia: 'até 338 km',
     perfil: 'Premium / Família',
@@ -30,7 +30,7 @@ const carros = [
   },
   {
     nome: 'Tesla Model 3',
-    imagem: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?auto=format&fit=crop&w=900&q=80',
+    imagem: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Tesla_Model_3_parked,_front_driver_side.jpg',
     desc: 'Sedan elétrico esportivo, indicado para quem procura performance, tecnologia e sofisticação.',
     autonomia: 'até 491 km',
     perfil: 'Esportivo',
@@ -38,16 +38,24 @@ const carros = [
   }
 ];
 
-const loginScreen = document.getElementById('loginScreen');
-const appScreen = document.getElementById('appScreen');
+const screens = {
+  home: document.getElementById('homeScreen'),
+  auth: document.getElementById('authScreen'),
+  dashboard: document.getElementById('dashboardScreen')
+};
+
+const loginPanel = document.getElementById('loginPanel');
+const signupPanel = document.getElementById('signupPanel');
 const loginForm = document.getElementById('loginForm');
+const signupForm = document.getElementById('signupForm');
 const loginError = document.getElementById('loginError');
+const signupMessage = document.getElementById('signupMessage');
 const gridCarros = document.getElementById('gridCarros');
 
 function criarCard(carro, extra = '') {
   return `
     <article class="card">
-      <img src="${carro.imagem}" alt="Imagem do ${carro.nome}">
+      <img src="${carro.imagem}" alt="Imagem real do ${carro.nome}">
       <div class="card-body">
         <h3>${extra}${carro.nome}</h3>
         <p>${carro.desc}</p>
@@ -62,51 +70,55 @@ function criarCard(carro, extra = '') {
   `;
 }
 
-function mostrarDashboard() {
-  loginScreen.classList.add('fade-out');
+function mostrarTela(nome) {
+  Object.values(screens).forEach((screen) => {
+    screen.hidden = true;
+    screen.classList.remove('fade-in');
+  });
 
-  setTimeout(() => {
-    loginScreen.hidden = true;
-    appScreen.hidden = false;
-    appScreen.classList.add('fade-in');
-  }, 280);
+  screens[nome].hidden = false;
+  screens[nome].classList.add('fade-in');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function mostrarAutenticacao(tipo) {
+  loginPanel.hidden = tipo !== 'login';
+  signupPanel.hidden = tipo !== 'signup';
+  loginError.textContent = '';
+  signupMessage.textContent = '';
+  mostrarTela('auth');
 }
 
 function simularEnvioConfirmacao(email) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve({
-        enviado: true,
-        email
-      });
+      resolve({ enviado: true, email });
     }, 500);
   });
 }
 
-loginForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-
-  if (email === mockUser.email && password === mockUser.password) {
-    loginError.textContent = '';
-    mostrarDashboard();
-    return;
-  }
-
-  loginError.textContent = 'E-mail ou senha incorretos. Use teste@demo.com e senha 123456.';
-});
-
 gridCarros.innerHTML = carros.map((carro) => criarCard(carro)).join('');
 
 document.addEventListener('click', (event) => {
+  const authButton = event.target.closest('[data-auth]');
+  const screenButton = event.target.closest('[data-screen]');
   const scrollButton = event.target.closest('[data-scroll]');
   const accessButton = event.target.closest('[data-action]');
 
+  if (authButton) {
+    mostrarAutenticacao(authButton.dataset.auth);
+  }
+
+  if (screenButton) {
+    mostrarTela(screenButton.dataset.screen);
+  }
+
   if (scrollButton) {
     const target = document.querySelector(scrollButton.dataset.scroll);
-    target?.scrollIntoView({ behavior: 'smooth' });
+    if (target) {
+      mostrarTela('home');
+      setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 50);
+    }
   }
 
   if (accessButton) {
@@ -116,6 +128,26 @@ document.addEventListener('click', (event) => {
     if (action === 'fonteMais') document.body.style.fontSize = '18px';
     if (action === 'fonteMenos') document.body.style.fontSize = '15px';
   }
+});
+
+loginForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+
+  if (email === mockUser.email && password === mockUser.password) {
+    loginError.textContent = '';
+    mostrarTela('dashboard');
+    return;
+  }
+
+  loginError.textContent = 'E-mail ou senha incorretos. Use teste@demo.com e senha 123456.';
+});
+
+signupForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  signupMessage.textContent = 'Cadastro demonstrativo criado. Agora você pode entrar com o usuário teste@demo.com.';
 });
 
 document.getElementById('quizForm').addEventListener('submit', (event) => {
