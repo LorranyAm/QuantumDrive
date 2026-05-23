@@ -713,4 +713,66 @@ div[vw-plugin-wrapper] {
     bottom: 92px;
   }
 }
+@media (max-width: 768px) {
 
+  body{
+    overflow-x: hidden;
+  }
+
+  .hero{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero img{
+    width: 100%;
+    height: auto;
+  }
+
+  .vehicle-grid{
+    grid-template-columns: 1fr;
+  }
+
+  .used-grid{
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-grid{
+    grid-template-columns: 1fr;
+  }
+
+  .form-grid{
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar{
+    width: 100%;
+  }
+
+  .sidebar-nav{
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .topbar-links{
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .card,
+  .panel,
+  .used-card{
+    width: 100%;
+  }
+
+  .btn{
+    width: 100%;
+  }
+
+  input,
+  select{
+    width: 100%;
+  }
+
+}
