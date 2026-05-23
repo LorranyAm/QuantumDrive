@@ -147,7 +147,11 @@ loginForm.addEventListener('submit', (event) => {
 
 signupForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  signupMessage.textContent = 'Cadastro demonstrativo criado. Agora você pode entrar com o usuário teste@demo.com.';
+  signupMessage.textContent = 'Cadastro demonstrativo criado. Entrando na sua conta...';
+
+  setTimeout(() => {
+    mostrarTela('dashboard');
+  }, 700);
 });
 
 document.getElementById('quizForm').addEventListener('submit', (event) => {
