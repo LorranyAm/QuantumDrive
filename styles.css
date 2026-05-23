@@ -437,6 +437,17 @@ footer,
   grid-column: 1 / -1;
 }
 
+.card-payment-fields {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid rgba(25, 214, 255, .2);
+  border-radius: 20px;
+  background: rgba(25, 214, 255, .06);
+}
+
 label {
   display: grid;
   gap: 9px;
@@ -1046,6 +1057,7 @@ div[vw-plugin-wrapper] {
   .feature-grid,
   .report-panel,
   .form-grid,
+  .card-payment-fields,
   .details-list,
   .specs,
   .dashboard-grid,

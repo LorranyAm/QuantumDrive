@@ -53,6 +53,9 @@ const loginError = document.getElementById('loginError');
 const recoverMessage = document.getElementById('recoverMessage');
 const signupMessage = document.getElementById('signupMessage');
 const gridCarros = document.getElementById('gridCarros');
+const pagamento = document.getElementById('pagamento');
+const cartaoCampos = document.getElementById('cartaoCampos');
+const cartaoInputs = cartaoCampos.querySelectorAll('input');
 
 function criarCard(carro, extra = '') {
   return `
@@ -101,6 +104,18 @@ function simularEnvioConfirmacao(email) {
 }
 
 gridCarros.innerHTML = carros.map((carro) => criarCard(carro)).join('');
+
+function atualizarCamposCartao() {
+  const usaCartao = pagamento.value === 'Cartão de crédito' || pagamento.value === 'Cartão de débito';
+  cartaoCampos.hidden = !usaCartao;
+  cartaoInputs.forEach((input) => {
+    input.required = usaCartao;
+    if (!usaCartao) input.value = '';
+  });
+}
+
+pagamento.addEventListener('change', atualizarCamposCartao);
+atualizarCamposCartao();
 
 document.addEventListener('click', (event) => {
   const authButton = event.target.closest('[data-auth]');
@@ -193,7 +208,7 @@ document.getElementById('reservaForm').addEventListener('submit', async (event) 
   const horaRetirada = document.getElementById('horaRetirada').value;
   const dataDevolucao = document.getElementById('dataDevolucao').value;
   const horaDevolucao = document.getElementById('horaDevolucao').value;
-  const pagamento = document.getElementById('pagamento').value;
+  const formaPagamento = document.getElementById('pagamento').value;
   const confirmation = document.getElementById('confirmacao');
   const confirmationText = document.getElementById('confirmacaoTexto');
   const receipt = document.getElementById('reciboReserva');
@@ -211,7 +226,7 @@ document.getElementById('reservaForm').addEventListener('submit', async (event) 
       <div><span>Protocolo</span><strong>${protocolo}</strong></div>
       <div><span>Cliente</span><strong>${nome}</strong></div>
       <div><span>Veículo</span><strong>${veiculo}</strong></div>
-      <div><span>Pagamento</span><strong>${pagamento}</strong></div>
+      <div><span>Pagamento</span><strong>${formaPagamento}</strong></div>
       <div><span>Retirada</span><strong>${dataRetirada} às ${horaRetirada}</strong></div>
       <div><span>Devolução</span><strong>${dataDevolucao} às ${horaDevolucao}</strong></div>
     </div>

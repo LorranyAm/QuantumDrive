@@ -162,6 +162,13 @@
             </select>
           </label>
 
+          <div id="cartaoCampos" class="card-payment-fields" hidden>
+            <label for="nomeCartao">Nome impresso no cartão<input id="nomeCartao" autocomplete="cc-name"></label>
+            <label for="numeroCartao">Número do cartão<input id="numeroCartao" inputmode="numeric" autocomplete="cc-number" maxlength="19" placeholder="0000 0000 0000 0000"></label>
+            <label for="validadeCartao">Validade<input id="validadeCartao" inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="MM/AA"></label>
+            <label for="cvvCartao">CVV<input id="cvvCartao" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="000"></label>
+          </div>
+
           <label for="cnh">CNH<input id="cnh" type="file" required></label>
           <label for="rg">RG<input id="rg" type="file" required></label>
           <label for="comprovante">Comprovante de residência<input id="comprovante" type="file" required></label>
