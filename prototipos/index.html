@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protótipos Quantum Drive</title>
+<style>
+:root{--verde:#00F5A0;--azul:#00D1FF;--lima:#A8FF00;--cinza:#cbd5e1;--c2:#94a3b8;--linha:rgba(255,255,255,.18);--bloco:rgba(255,255,255,.07);}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif;}
+body{background:linear-gradient(135deg,#05070c,#0A1B2E);background-attachment:fixed;color:#fff;padding:40px 5%;}
+h1{font-size:clamp(2rem,4vw,3rem);text-transform:uppercase;}
+h1 span{color:var(--verde);}
+.intro{color:var(--cinza);max-width:820px;line-height:1.7;margin:14px 0 30px;}
+.etq{color:var(--verde);font-weight:900;letter-spacing:2px;font-size:.8rem;text-transform:uppercase;}
+h2{text-transform:uppercase;margin:50px 0 6px;font-size:1.5rem;}
+.obj{color:var(--c2);margin-bottom:20px;line-height:1.6;max-width:900px;}
+
+/* Fluxo */
+.fluxo{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:20px 0;}
+.no{background:rgba(21,24,33,.98);border:2px solid var(--verde);border-radius:14px;padding:14px 18px;font-weight:900;text-align:center;min-width:120px;}
+.no small{display:block;color:var(--c2);font-weight:400;font-size:.75rem;margin-top:4px;}
+.no.adm{border-color:var(--azul);}
+.seta{color:var(--verde);font-size:1.6rem;font-weight:900;}
+.metricas{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:10px;}
+.metricas div{background:rgba(21,24,33,.98);border:1px solid rgba(0,245,160,.25);border-radius:14px;padding:16px;color:var(--cinza);font-size:.9rem;line-height:1.5;}
+.metricas b{color:var(--verde);display:block;font-size:1.4rem;}
+
+/* Wireframes */
+.par{display:grid;grid-template-columns:1fr 260px;gap:26px;align-items:start;}
+.desk,.mob{border:2px solid var(--linha);border-radius:14px;overflow:hidden;background:#0b0f18;}
+.mob{border-radius:30px;padding:10px;}
+.mob .tela{border-radius:22px;overflow:hidden;border:1px solid var(--linha);min-height:480px;}
+.barra-nav{display:flex;align-items:center;gap:6px;padding:8px 12px;background:#151924;border-bottom:1px solid var(--linha);}
+.barra-nav i{width:10px;height:10px;border-radius:50%;background:#333;}
+.barra-nav span{margin-left:10px;font-size:.72rem;color:var(--c2);background:#0b0f18;padding:4px 10px;border-radius:6px;flex:1;}
+.wf{padding:14px;display:grid;gap:10px;}
+.hd{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border:1px dashed var(--linha);border-radius:8px;font-size:.72rem;color:var(--c2);}
+.hd b{color:var(--verde);font-size:.85rem;}
+.bx{background:var(--bloco);border:1px dashed var(--linha);border-radius:10px;padding:10px;font-size:.72rem;color:var(--c2);display:flex;align-items:center;justify-content:center;text-align:center;min-height:34px;}
+.img{background:repeating-linear-gradient(45deg,rgba(255,255,255,.04) 0 10px,rgba(255,255,255,.08) 10px 20px);}
+.cta{background:linear-gradient(135deg,var(--verde),var(--azul));color:#00110c;font-weight:900;border:none;border-radius:999px;}
+.cta2{border:2px solid #fff;color:#fff;font-weight:900;border-radius:999px;background:none;}
+.row{display:grid;gap:10px;}
+.c2{grid-template-columns:1fr 1fr;}.c3{grid-template-columns:repeat(3,1fr);}.c4{grid-template-columns:repeat(4,1fr);}.c5{grid-template-columns:repeat(5,1fr);}
+.c21{grid-template-columns:1.4fr 1fr;}.c14{grid-template-columns:120px 1fr;}
+.verde{color:var(--verde);border-color:rgba(0,245,160,.5);}
+.erro{color:#ff5470;border-color:rgba(255,84,112,.6);}
+.notas{list-style:none;display:grid;gap:8px;margin-top:14px;}
+.notas li{color:var(--cinza);font-size:.88rem;line-height:1.5;padding-left:26px;position:relative;}
+.notas li b{color:#fff;}
+.notas li::before{content:attr(data-n);position:absolute;left:0;top:0;width:18px;height:18px;border-radius:50%;background:var(--verde);color:#00110c;font-size:.7rem;font-weight:900;display:grid;place-items:center;}
+.pin{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;background:var(--verde);color:#00110c;font-size:.62rem;font-weight:900;margin-right:4px;flex:none;}
+.check{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;}
+.check label{display:flex;gap:10px;align-items:flex-start;background:rgba(21,24,33,.98);border:1px solid rgba(0,245,160,.25);border-radius:12px;padding:12px;color:var(--cinza);font-size:.88rem;line-height:1.4;cursor:pointer;}
+.check input{accent-color:var(--verde);width:18px;height:18px;margin-top:1px;flex:none;}
+@media(max-width:820px){.par{grid-template-columns:1fr;}.mob{max-width:280px;margin:auto;}}
+@media print{body{background:#05070c;-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+</style>
+</head>
+<body>
+
+<span class="etq">Validação de UX · antes da implementação</span>
+<h1>Protótipos <span>Quantum Drive</span></h1>
+<p class="intro">Wireframes de baixa fidelidade de cada tela, na versão web e mobile (app Kotlin). Os números verdes marcam as decisões de experiência explicadas abaixo de cada tela. No fim há um roteiro de teste com usuários para validar o fluxo antes de codar.</p>
+
+<!-- ====================== FLUXO ====================== -->
+<span class="etq">Mapa de navegação</span>
+<h2>Fluxo principal do cliente</h2>
+<div class="fluxo">
+  <div class="no">Login / Cadastro<small>1 tela, 1 clique para alternar</small></div><span class="seta">→</span>
+  <div class="no">Veículos<small>filtros por categoria</small></div><span class="seta">→</span>
+  <div class="no">Detalhes<small>datas + preço na hora</small></div><span class="seta">→</span>
+  <div class="no">Reserva<small>dados já preenchidos</small></div><span class="seta">→</span>
+  <div class="no">Histórico<small>status ao vivo</small></div>
+</div>
+<h2 style="margin-top:20px">Fluxo do dono</h2>
+<div class="fluxo">
+  <div class="no adm">Login<small>mesma tela, papel “dono”</small></div><span class="seta">→</span>
+  <div class="no adm">Painel<small>visão geral</small></div><span class="seta">→</span>
+  <div class="no adm">Reservas<small>muda status → e-mail ao cliente</small></div>
+  <div class="no adm">Frota<small>preço, unidades, manutenção</small></div>
+  <div class="no adm">Clientes / E-mails</div>
+</div>
+<div class="metricas">
+  <div><b>8 → 5 cliques</b>Do início até a reserva enviada (antes era preciso rolar a página e preencher tudo do zero).</div>
+  <div><b>0 redigitação</b>Nome, e-mail, CPF e telefone vêm do cadastro; datas vêm da tela de detalhes.</div>
+  <div><b>Login só quando precisa</b>Visitante navega livre; o login aparece ao reservar e volta para onde estava.</div>
+  <div><b>1 lugar para acompanhar</b>Histórico com status ao vivo + cópia dos e-mails recebidos.</div>
+</div>
+
+<!-- ====================== 1. LOGIN ====================== -->
+<span class="etq" style="display:block;margin-top:50px">Tela 1</span>
+<h2>Login / Cadastro</h2>
+<p class="obj">Objetivo: entrar rápido. Cliente e dono usam a mesma tela; o sistema identifica o papel e leva cada um ao lugar certo.</p>
+<div class="par">
+  <div class="desk"><div class="barra-nav"><i></i><i></i><i></i><span>quantumdrive.com/#/login</span></div>
+    <div class="wf">
+      <div class="hd"><b>QuantumDrive</b><span>Modelos · Como funciona · Quiz · Minhas reservas</span><span>[Entrar] [Cadastrar]</span></div>
+      <div class="bx verde"><span class="pin">1</span>Stepper: ● Entrar — Veículos — Detalhes — Reserva — Histórico</div>
+      <div style="max-width:340px;margin:auto;width:100%" class="row">
+        <div class="bx">E-mail</div><div class="bx erro"><span class="pin">2</span>Senha — “E-mail ou senha incorretos.”</div>
+        <div class="bx cta">ENTRAR</div>
+        <div class="bx">Ainda não tem conta? <u>Cadastre-se</u></div>
+        <div class="bx verde"><span class="pin">3</span>Contas de demonstração</div>
+      </div>
+    </div></div>
+  <div class="mob"><div class="tela"><div class="wf">
+      <div class="hd"><b>QD</b><span>☰</span></div>
+      <div class="bx">● ○ ○ ○ ○</div>
+      <div class="bx" style="min-height:70px">Logo + “Bem-vindo”</div>
+      <div class="bx">E-mail</div><div class="bx">Senha</div>
+      <div class="bx cta">ENTRAR</div>
+      <div class="bx">Cadastre-se</div>
+  </div></div></div>
+</div>
+<ul class="notas">
+  <li data-n="1"><b>Stepper fixo</b> em todas as telas do fluxo: o cliente sempre sabe em que passo está e quanto falta.</li>
+  <li data-n="2"><b>Erro no próprio campo</b>, em vermelho, + aviso no canto (toast). Nada de alert() que bloqueia a tela.</li>
+  <li data-n="3"><b>Atalho para teste</b> de banca/professor: contas de cliente e dono já criadas.</li>
+</ul>
+
+<!-- ====================== 2. VEÍCULOS ====================== -->
+<span class="etq" style="display:block;margin-top:50px">Tela 2</span>
+<h2>Veículos</h2>
+<p class="obj">Objetivo: comparar e escolher em segundos. Inspirado no menu de modelos da BYD: abas por categoria e foto grande.</p>
+<div class="par">
+  <div class="desk"><div class="barra-nav"><i></i><i></i><i></i><span>quantumdrive.com/#/veiculos</span></div>
+    <div class="wf">
+      <div class="hd"><b>QuantumDrive</b><span>Modelos · Minhas reservas</span><span>(CD) Cliente ▾</span></div>
+      <div class="row c4"><div class="bx cta"><span class="pin">1</span>Todos</div><div class="bx">Hatch</div><div class="bx">SUV</div><div class="bx">Sedan</div></div>
+      <div class="row c3"><div class="bx">Disponibilidade ▾</div><div class="bx">Ordenar: preço / autonomia ▾</div><div class="bx">🔍 Buscar modelo</div></div>
+      <div class="row c3" id="cardsVeic"></div>
+    </div></div>
+  <div class="mob"><div class="tela"><div class="wf">
+      <div class="hd"><b>QD</b><span>(CD)</span></div>
+      <div class="row c4" style="gap:4px"><div class="bx cta">Todos</div><div class="bx">Hatch</div><div class="bx">SUV</div><div class="bx">Sedan</div></div>
+      <div class="bx img" style="min-height:110px"><span class="pin">2</span>Foto + selo “Disponível”</div>
+      <div class="bx">BYD Seal · 570 km · 531 cv · 5</div>
+      <div class="row c2"><div class="bx">R$ 329/dia</div><div class="bx cta">Ver</div></div>
+      <div class="bx img" style="min-height:110px">Próximo carro…</div>
+  </div></div></div>
+</div>
+<ul class="notas">
+  <li data-n="1"><b>Abas de categoria</b> no topo, como no site da BYD — o filtro mais usado fica a um toque.</li>
+  <li data-n="2"><b>Selo de status</b> na foto (Disponível / Última unidade / Reservado / Manutenção) e <b>barra de autonomia</b> para comparar de relance.</li>
+  <li data-n="3"><b>Um botão por card</b> (“Ver e reservar”): menos decisões, menos cliques.</li>
+</ul>
+
+<!-- ====================== 3. DETALHES ====================== -->
+<span class="etq" style="display:block;margin-top:50px">Tela 3</span>
+<h2>Detalhes do veículo</h2>
+<p class="obj">Objetivo: dar segurança para decidir. Ficha técnica visual de um lado; datas e preço total do outro, sempre visíveis.</p>
+<div class="par">
+  <div class="desk"><div class="barra-nav"><i></i><i></i><i></i><span>quantumdrive.com/#/veiculo/seal</span></div>
+    <div class="wf">
+      <div class="hd"><b>QuantumDrive</b><span>✓ Entrar — ✓ Veículos — ● Detalhes — Reserva — Histórico</span><span></span></div>
+      <div class="row c21">
+        <div class="row">
+          <div class="bx img" style="min-height:150px">Foto grande + selos (Disponível · 3 livres | Sedan)</div>
+          <div class="bx" style="justify-content:flex-start">SEDAN 100% ELÉTRICO · <b style="color:#fff">BYD SEAL</b></div>
+          <div class="row c3"><div class="bx"><span class="pin">1</span>570 km ▓▓▓▓</div><div class="bx">531 cv</div><div class="bx">82,5 kWh</div><div class="bx">Recarga 26 min</div><div class="bx">5 lugares</div><div class="bx">400 L</div></div>
+          <div class="bx">✓ Destaques do modelo</div>
+        </div>
+        <div class="row" style="align-content:start">
+          <div class="bx" style="color:var(--lima)">R$ 329/dia</div>
+          <div class="row c2"><div class="bx"><span class="pin">2</span>Retirada</div><div class="bx">Hora</div><div class="bx">Devolução</div><div class="bx">Hora</div></div>
+          <div class="bx verde"><span class="pin">3</span>3 diárias + proteção = R$ 1.104</div>
+          <div class="bx cta">CONTINUAR RESERVA</div>
+        </div>
+      </div>
+      <div class="bx">Compare com outros Sedans → cards</div>
+    </div></div>
+  <div class="mob"><div class="tela"><div class="wf">
+      <div class="hd"><b>←</b><span>BYD Seal</span></div>
+      <div class="bx img" style="min-height:120px">Foto</div>
+      <div class="row c3" style="gap:4px"><div class="bx">570 km</div><div class="bx">531 cv</div><div class="bx">5</div></div>
+      <div class="row c2"><div class="bx">Retirada</div><div class="bx">Devolução</div></div>
+      <div class="bx verde">Total R$ 1.104</div>
+      <div class="bx cta">CONTINUAR</div>
+  </div></div></div>
+</div>
+<ul class="notas">
+  <li data-n="1"><b>Ficha em blocos</b>: autonomia, potência, bateria, recarga, lugares, porta-malas — com barra de autonomia relativa.</li>
+  <li data-n="2"><b>Datas já aqui</b>: o cliente escolhe o período sem trocar de tela; as datas seguem para a reserva (e sobrevivem ao login).</li>
+  <li data-n="3"><b>Preço total ao vivo</b>, com proteção e desconto de 7+ diárias. Se o período for inválido ou sem carro livre, o erro aparece no campo.</li>
+</ul>
+
+<!-- ====================== 4. RESERVA ====================== -->
+<span class="etq" style="display:block;margin-top:50px">Tela 4</span>
+<h2>Reserva</h2>
+<p class="obj">Objetivo: enviar sem erro. Validação no front-end antes de chamar a API, com confirmação final.</p>
+<div class="par">
+  <div class="desk"><div class="barra-nav"><i></i><i></i><i></i><span>quantumdrive.com/#/reserva/seal</span></div>
+    <div class="wf">
+      <div class="hd"><b>QuantumDrive</b><span>✓ ✓ ✓ ● Reserva — Histórico</span><span></span></div>
+      <div class="row c21">
+        <div class="row c2">
+          <div class="bx">Data/hora retirada</div><div class="bx">Data/hora devolução</div>
+          <div class="bx">Loja ▾</div><div class="bx">Pagamento ▾</div>
+          <div class="bx verde"><span class="pin">1</span>Nome (preenchido)</div><div class="bx verde">E-mail (preenchido)</div>
+          <div class="bx verde">Telefone (preenchido)</div><div class="bx erro"><span class="pin">2</span>CPF — “CPF inválido”</div>
+          <div class="bx">Nº CNH · validade</div><div class="bx">📎 CNH · RG · Comprovante</div>
+          <div class="bx cta" style="grid-column:1/-1"><span class="pin">3</span>CONFIRMAR RESERVA</div>
+        </div>
+        <div class="row" style="align-content:start"><div class="bx img" style="min-height:70px">Foto</div><div class="bx">Resumo fixo: período, diárias, proteção</div><div class="bx" style="color:var(--lima)">Total</div><div class="bx">← Trocar carro ou datas</div></div>
+      </div>
+    </div></div>
+  <div class="mob"><div class="tela"><div class="wf">
+      <div class="hd"><b>←</b><span>Reserva</span></div>
+      <div class="bx verde">Resumo recolhível · R$ 1.104</div>
+      <div class="bx">Loja ▾</div><div class="bx">Pagamento ▾</div>
+      <div class="bx verde">Dados preenchidos ✓</div>
+      <div class="bx erro">CPF inválido</div>
+      <div class="bx">📎 Documentos (3)</div>
+      <div class="bx cta">CONFIRMAR</div>
+  </div></div></div>
+</div>
+<ul class="notas">
+  <li data-n="1"><b>Dados do cadastro pré-preenchidos</b> e editáveis.</li>
+  <li data-n="2"><b>Validações</b>: CPF (dígitos verificadores), e-mail, telefone com DDD, CNH com 11 dígitos e válida até a devolução, período entre 1 e 30 dias, retirada no futuro, conflito de datas com a frota, arquivos PDF/JPG/PNG até 5 MB.</li>
+  <li data-n="3"><b>Confirmação em modal</b> com o resumo → botão em estado “Enviando…” → toast de sucesso → vai direto ao Histórico. E-mail “Recebemos sua reserva” é disparado.</li>
+</ul>
+
+<!-- ====================== 5. HISTÓRICO ====================== -->
+<span class="etq" style="display:block;margin-top:50px">Tela 5</span>
+<h2>Histórico de reservas</h2>
+<p class="obj">Objetivo: acompanhar sem precisar perguntar. Status muda sozinho e o cliente é avisado na tela e por e-mail.</p>
+<div class="par">
+  <div class="desk"><div class="barra-nav"><i></i><i></i><i></i><span>quantumdrive.com/#/historico</span></div>
+    <div class="wf">
+      <div class="hd"><b>QuantumDrive</b><span>✓ ✓ ✓ ✓ ● Histórico</span><span class="verde">● ao vivo</span></div>
+      <div class="row c4"><div class="bx">Total</div><div class="bx">Ativas</div><div class="bx">Concluídas</div><div class="bx">Km elétricos</div></div>
+      <div class="row c4"><div class="bx cta">Todas</div><div class="bx">Ativas</div><div class="bx">Concluídas</div><div class="bx">Canceladas</div></div>
+      <div class="row c14"><div class="bx img">Foto</div><div class="bx" style="justify-content:flex-start"><span class="pin">1</span>BYD Seal · <b style="color:var(--azul);margin:0 6px">EM ANÁLISE</b> · QD-7K2PA · 26/10 → 29/10 · R$ 1.104 · ▓▓░░ [Cancelar]</div></div>
+      <div class="row c14"><div class="bx img">Foto</div><div class="bx" style="justify-content:flex-start">BYD Dolphin · <b style="color:var(--c2);margin:0 6px">CONCLUÍDA</b> · ▓▓▓▓ [Alugar de novo]</div></div>
+      <div class="bx"><span class="pin">2</span>E-mails recebidos (cópia de tudo que foi enviado)</div>
+    </div></div>
+  <div class="mob"><div class="tela"><div class="wf">
+      <div class="hd"><b>Minhas reservas</b><span class="verde">● ao vivo</span></div>
+      <div class="bx">Em análise → Confirmada → Em andamento → Concluída</div>
+      <div class="bx img" style="min-height:70px">BYD Seal</div>
+      <div class="bx">QD-7K2PA · R$ 1.104</div>
+      <div class="bx img" style="min-height:70px">BYD Dolphin</div>
+      <div class="bx">Puxe para atualizar</div>
+  </div></div></div>
+</div>
+<ul class="notas">
+  <li data-n="1"><b>Linha do tempo de status</b>: Em análise → Confirmada → Em andamento → Concluída (ou Cancelada). Muda em tempo real quando o dono altera ou quando chega a data.</li>
+  <li data-n="2"><b>E-mail a cada mudança</b> de status, com o resumo da reserva. O histórico guarda uma cópia.</li>
+  <li data-n="3"><b>Cancelamento</b> com aviso da regra (grátis até 24 h antes).</li>
+</ul>
+
+<!-- ====================== 6. PAINEL DO DONO ====================== -->
+<span class="etq" style="display:block;margin-top:50px">Tela 6</span>
+<h2>Painel do dono</h2>
+<p class="obj">Objetivo: gerir o negócio num só lugar. Acesso exclusivo para conta com papel “dono”.</p>
+<div class="desk" style="max-width:1000px"><div class="barra-nav"><i></i><i></i><i></i><span>quantumdrive.com/#/admin</span></div>
+  <div class="wf">
+    <div class="hd"><b>QuantumDrive</b><span>… · Painel do dono</span><span>(DQ) Dono ▾</span></div>
+    <div class="row" style="grid-template-columns:150px 1fr">
+      <div class="row" style="align-content:start"><div class="bx cta">Visão geral</div><div class="bx">Reservas</div><div class="bx">Frota</div><div class="bx">Clientes</div><div class="bx">E-mails</div><div class="bx">Config. e-mail</div></div>
+      <div class="row">
+        <div class="row c5"><div class="bx" style="color:var(--lima)">Receita</div><div class="bx">Ativas</div><div class="bx">Em análise</div><div class="bx">Ocupação</div><div class="bx">Clientes</div></div>
+        <div class="bx" style="min-height:90px"><span class="pin">1</span>Gráfico: reservas por modelo</div>
+        <div class="bx" style="min-height:70px"><span class="pin">2</span>Tabela de reservas · coluna Status com seletor (muda → e-mail automático ao cliente)</div>
+        <div class="bx"><span class="pin">3</span>Frota: preço da diária · unidades · em manutenção (reflete no catálogo na hora)</div>
+      </div>
+    </div>
+  </div></div>
+<ul class="notas">
+  <li data-n="1"><b>Indicadores</b> no topo e gráfico simples por modelo.</li>
+  <li data-n="2"><b>Mudar status = avisar o cliente</b>: o e-mail sai sozinho, sem passo extra.</li>
+  <li data-n="3"><b>Frota editável</b>: colocar um carro em manutenção muda o selo no catálogo e bloqueia novas reservas.</li>
+</ul>
+
+<!-- ====================== ROTEIRO DE TESTE ====================== -->
+<span class="etq" style="display:block;margin-top:50px">Validação</span>
+<h2>Roteiro de teste com usuários</h2>
+<p class="obj">Peça a 5 pessoas para fazer as tarefas abaixo nos protótipos (ou no site) sem ajuda. Marque o que deu certo. Se 2 ou mais pessoas travarem no mesmo ponto, ajuste antes de seguir.</p>
+<div class="check">
+  <label><input type="checkbox">Criar uma conta nova em menos de 1 minuto.</label>
+  <label><input type="checkbox">Encontrar um SUV disponível para 7 pessoas.</label>
+  <label><input type="checkbox">Dizer a autonomia e o preço total de 3 dias do BYD Seal.</label>
+  <label><input type="checkbox">Fazer uma reserva completa (com documentos) sem voltar telas.</label>
+  <label><input type="checkbox">Entender a mensagem de erro de um CPF digitado errado.</label>
+  <label><input type="checkbox">Achar o status da reserva e o e-mail de confirmação.</label>
+  <label><input type="checkbox">Cancelar uma reserva e entender a regra das 24 h.</label>
+  <label><input type="checkbox">(Dono) Confirmar uma reserva e colocar um carro em manutenção.</label>
+  <label><input type="checkbox">Fazer tudo isso no celular e com o VLibras/alto contraste ativo.</label>
+</div>
+
+<script>
+/* monta os 3 cards de exemplo da tela Veículos */
+{ const r = document.getElementById('cardsVeic');
+    r.innerHTML = ['Dolphin Mini','Yuan Plus','Seal'].map((n,i)=>`<div class="row"><div class="bx img" style="min-height:80px">${i===0?'<span class="pin">2</span>':''}Foto · selo status · categoria</div><div class="bx">BYD ${n}</div><div class="bx">km · cv · lugares ▓▓▓░</div><div class="row c2"><div class="bx" style="color:var(--lima)">R$/dia</div><div class="bx cta">${i===0?'<span class="pin">3</span>':''}Ver</div></div></div>`).join('');
+}
+</script>
+</body>
+</html>
