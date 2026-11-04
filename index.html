@@ -2,7 +2,16 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- App instalável (PWA): Android e iPhone -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#05070c">
+<link rel="icon" type="image/png" href="icones/favicon-32.png">
+<link rel="apple-touch-icon" href="icones/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Quantum Drive">
 <title>Quantum Drive — Aluguel de carros elétricos</title>
 <meta name="description" content="Quantum Drive: aluguel de carros 100% elétricos BYD com reserva online.">
 
@@ -34,7 +43,7 @@ button{font:inherit;}
 @media(min-width:1300px){.container{padding:0 20px;}}
 
 /* ---------- Cabeçalho estilo BYD ---------- */
-header{position:fixed;inset:0 0 auto 0;z-index:9999;transition:background .3s,backdrop-filter .3s;background:linear-gradient(180deg,rgba(0,0,0,.75),transparent);}
+header{position:fixed;inset:0 0 auto 0;z-index:9999;padding-top:env(safe-area-inset-top);transition:background .3s,backdrop-filter .3s;background:linear-gradient(180deg,rgba(0,0,0,.75),transparent);}
 header.solido{background:rgba(0,0,0,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.06);}
 .header-inner{display:flex;align-items:center;justify-content:space-between;height:72px;gap:20px;}
 .logo{font-size:1.7rem;font-weight:900;color:var(--verde);text-decoration:none;letter-spacing:-.5px;white-space:nowrap;}
@@ -319,6 +328,17 @@ td select,td input{padding:8px 10px;font-size:.85rem;}
 .fin-grafico div.sel{background:linear-gradient(0deg,var(--lima),var(--verde));}
 .fin-detalhe{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
 @media(max-width:900px){.fin-detalhe{grid-template-columns:1fr !important;}}
+/* ---------- Página do app ---------- */
+.app-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:980px;margin:0 auto;}
+.app-card.destaque{border-color:var(--verde);box-shadow:0 0 0 2px color-mix(in srgb,var(--verde) 35%,transparent);}
+.app-topo{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
+.app-so{font-size:2.4rem;line-height:1;}
+.app-topo h3{font-size:1.5rem;text-transform:uppercase;}
+.app-passos{margin:18px 0 10px 20px;display:grid;gap:10px;color:var(--cinza);line-height:1.5;}
+.app-passos b{color:#fff;}
+.ico-ios{display:inline-block;border:1px solid var(--cinza2);border-radius:6px;padding:0 5px;font-size:.85rem;}
+body.no-app .link-app{display:none;}
+@media(max-width:820px){.app-grid{grid-template-columns:1fr;}}
 /* ---------- Toasts e modal ---------- */
 #toasts{pointer-events:none;position:fixed;top:86px;right:20px;z-index:200000;display:flex;flex-direction:column;gap:10px;max-width:min(380px,calc(100vw - 40px));}
 .toast{pointer-events:auto;display:flex;gap:12px;align-items:flex-start;background:#0d111a;border:1px solid var(--borda);border-left:5px solid var(--verde);border-radius:14px;padding:14px 16px;box-shadow:0 14px 40px rgba(0,0,0,.5);animation:entra .3s ease;}
@@ -354,7 +374,59 @@ footer a:hover{color:var(--verde);}
 .acessibilidade button[aria-pressed=true]{background:var(--verde);color:#00110c;}
 body.contraste{background:#000;--cinza:#fff;--cinza2:#e5e5e5;--card:#000;--borda:#fff;}
 body.contraste .card,body.contraste .caixa{border-width:2px;}
-body.daltonico{filter:hue-rotate(35deg);}
+/* ---------- Modo daltônico ----------
+   Troca a paleta por cores que cada tipo de daltonismo consegue distinguir
+   (testadas com a simulação de Machado et al., 2009) e acrescenta ícones,
+   para que nenhuma informação dependa só da cor. */
+body.dalt-protan,body.dalt-deutan{--verde:#7CC4FF;--azul:#B452FF;--lima:#FFFFFF;--alerta:#FFE600;--erro:#E8513F;--borda:rgba(124,196,255,.32);}
+body.dalt-tritan{--verde:#13ECDD;--azul:#EC13DD;--lima:#FFFFFF;--alerta:#F8D5AA;--erro:#FF2E1A;--borda:rgba(19,236,221,.32);}
+body.dalt-acro{--verde:#FFFFFF;--azul:#C8C8C8;--lima:#FFFFFF;--alerta:#C8C8C8;--erro:#FFFFFF;--borda:rgba(255,255,255,.35);--cinza:#E6E6E6;}
+/* fundos que usavam o verde/azul/vermelho fixos */
+body.dalt .st-disponivel{background:var(--verde);color:#00110c;}
+body.dalt .st-reservado{background:var(--alerta);color:#1a1000;}
+body.dalt .st-manutencao{background:var(--erro);color:#fff;}
+body.dalt-acro .st-manutencao{background:#fff;color:#000;outline:2px dashed #000;outline-offset:-4px;}
+body.dalt .alerta-ok{background:color-mix(in srgb,var(--verde) 12%,transparent);border-color:var(--verde);}
+body.dalt .alerta-info{background:color-mix(in srgb,var(--azul) 12%,transparent);border-color:var(--azul);}
+body.dalt .alerta-erro{background:color-mix(in srgb,var(--erro) 14%,transparent);border:2px dashed var(--erro);}
+body.dalt .s-analise{background:color-mix(in srgb,var(--azul) 18%,transparent);}
+body.dalt .s-confirmada{background:color-mix(in srgb,var(--verde) 18%,transparent);}
+body.dalt .s-andamento{background:color-mix(in srgb,var(--lima) 18%,transparent);}
+body.dalt .s-cancelada{background:color-mix(in srgb,var(--erro) 18%,transparent);}
+body.dalt .tag-ev{background:color-mix(in srgb,var(--verde) 18%,transparent);}
+body.dalt .tag-hib{background:color-mix(in srgb,var(--azul) 18%,transparent);}
+body.dalt .calc-item[aria-selected=true],body.dalt .admin-menu button.ativo,body.dalt .menu-usuario a:hover{background:color-mix(in srgb,var(--verde) 12%,transparent);}
+body.dalt .calc-card.save{background:color-mix(in srgb,var(--verde) 14%,transparent);}
+body.dalt .calc-card .v[style]{color:var(--erro)!important;}
+body.dalt .calc-barra:first-child .trilho i{background:repeating-linear-gradient(45deg,var(--erro) 0 8px,color-mix(in srgb,var(--erro) 55%,#000) 8px 16px)!important;}
+body.dalt .calc-barra:last-child .trilho i{background:var(--verde)!important;}
+body.dalt .slide,body.dalt .card-img,body.dalt .galeria-principal,body.dalt .calc-hero,body.dalt .calc-modelo .foto,body.dalt .resumo-foto{background:radial-gradient(ellipse at 50% 72%,color-mix(in srgb,var(--verde) 18%,transparent),transparent 62%),#0d1220!important;}
+/* ícones e formas além da cor */
+body.dalt .st-disponivel::before{content:"✓ ";}
+body.dalt .st-reservado::before{content:"⏳ ";}
+body.dalt .st-manutencao::before{content:"🔧 ";}
+body.dalt .status::before{background:none;width:auto;height:auto;font-size:.9rem;animation:none;}
+body.dalt .s-analise::before{content:"⏳";}
+body.dalt .s-confirmada::before{content:"✓";}
+body.dalt .s-andamento::before{content:"▶";}
+body.dalt .s-concluida::before{content:"■";}
+body.dalt .s-cancelada::before{content:"✕";}
+body.dalt .campo-erro input,body.dalt .campo-erro select{border:2px dashed var(--erro);}
+body.dalt .campo-erro .msg-campo::before{content:"⚠ ";}
+body.dalt .campo-ok .msg-campo::before{content:"✓ ";}
+body.dalt .toast.erro{border-left-style:dashed;}
+body.dalt .tag-ev::before{content:"⚡ ";}
+body.dalt .tag-hib::before{content:"⛽⚡ ";}
+body.dalt a:not(.btn):not(.logo),body.dalt .btn-link{text-decoration:underline;text-underline-offset:3px;}
+body.dalt .linha-tempo i.on{background:repeating-linear-gradient(90deg,var(--verde) 0 6px,color-mix(in srgb,var(--verde) 60%,#000) 6px 8px);}
+/* seletor de tipo de daltonismo */
+.dalt-opcoes{display:grid;gap:10px;margin-top:14px;}
+.dalt-opcao{display:flex;align-items:center;gap:12px;text-align:left;padding:12px 14px;border-radius:14px;border:2px solid rgba(255,255,255,.12);background:#0f121a;color:#fff;cursor:pointer;font:inherit;}
+.dalt-opcao[aria-checked=true]{border-color:#fff;background:#1a1f2b;}
+.dalt-opcao b{display:block;}
+.dalt-opcao small{color:#94a3b8;}
+.dalt-amostra{display:flex;gap:4px;margin-left:auto;flex:none;}
+.dalt-amostra i{width:16px;height:16px;border-radius:50%;display:block;border:1px solid rgba(255,255,255,.3);}
 :focus-visible{outline:3px solid var(--azul);outline-offset:2px;}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
 
@@ -407,6 +479,7 @@ body.daltonico{filter:hue-rotate(35deg);}
       <a href="#/" data-ancora="como">Como funciona</a>
       <a href="#/" data-ancora="economia">Economia</a>
       <a href="#/historico" data-rota="historico">Minhas reservas</a>
+      <a href="#/app" data-rota="app" class="link-app">📲 Baixar app</a>
       <a href="#/admin" data-rota="admin" id="linkAdmin" hidden>Painel do dono</a>
     </nav>
     <div class="header-acoes" id="headerAcoes"></div>
@@ -519,6 +592,40 @@ body.daltonico{filter:hue-rotate(35deg);}
 </div>
 
 <!-- ===================== LOGIN ===================== -->
+<div class="vista pagina" id="v-app">
+  <div class="container">
+    <div class="titulo">
+      <span class="etiqueta">Aplicativo</span>
+      <h2>Quantum Drive no seu celular</h2>
+      <p>Reserve, acompanhe o status e receba as confirmações direto pelo app.</p>
+    </div>
+    <div id="appJaInstalado" class="alerta-box alerta-ok" hidden>✓ Você já está usando o app Quantum Drive.</div>
+    <div class="app-grid">
+      <div class="caixa app-card" id="cardAndroid">
+        <div class="app-topo"><span class="app-so">🤖</span><div><h3>Android</h3><p class="dica">Celulares Samsung, Motorola, Xiaomi e outros</p></div></div>
+        <a class="btn" href="https://github.com/LorranyAm/QuantumDrive/releases/latest/download/QuantumDrive.apk" id="btnApk" style="width:100%">⬇ Baixar app (APK)</a>
+        <button class="btn btn-contorno" id="btnInstalarPwa" hidden style="width:100%;margin-top:10px">📲 Instalar pelo navegador</button>
+        <ol class="app-passos">
+          <li>Toque em <b>Baixar app (APK)</b> e abra o arquivo baixado.</li>
+          <li>Se aparecer “Por segurança, seu telefone não pode instalar apps desta fonte”, toque em <b>Configurações</b> e ative <b>Permitir desta fonte</b>.</li>
+          <li>Toque em <b>Instalar</b> e depois em <b>Abrir</b>. O ícone do Quantum Drive aparece na tela inicial.</li>
+        </ol>
+        <p class="dica">O app é gratuito e é atualizado junto com o site.</p>
+      </div>
+      <div class="caixa app-card" id="cardIphone">
+        <div class="app-topo"><span class="app-so">📱</span><div><h3>iPhone e iPad</h3><p class="dica">Pelo Safari, sem precisar da App Store</p></div></div>
+        <ol class="app-passos">
+          <li>Abra <b>este site no Safari</b>.</li>
+          <li>Toque no botão <b>Compartilhar</b> <span class="ico-ios" aria-label="ícone de compartilhar">⬆︎</span> (na barra de baixo).</li>
+          <li>Role e toque em <b>Adicionar à Tela de Início</b>, depois em <b>Adicionar</b>.</li>
+          <li>Abra o Quantum Drive pelo ícone novo: ele funciona em tela cheia, como um app.</li>
+        </ol>
+        <p class="dica">No iPhone não dá para instalar arquivo de app fora da App Store; por isso o Quantum Drive é instalado pelo Safari.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="vista pagina" id="v-admin-login">
   <div class="container">
     <div class="caixa caixa-estreita" style="border-color:var(--azul);margin-top:30px">
@@ -737,7 +844,7 @@ body.daltonico{filter:hue-rotate(35deg);}
       </div>
       <div><h4>Modelos</h4><a href="#/veiculos?cat=Hatch">Hatch</a><a href="#/veiculos?cat=SUV">SUV</a><a href="#/veiculos?cat=Sedan">Sedan</a></div>
       <div><h4>Minha conta</h4><a href="#/login">Entrar</a><a href="#/cadastro">Cadastrar</a><a href="#/historico">Minhas reservas</a><a href="#/admin-login">🔐 Área do administrador</a></div>
-      <div><h4>Atendimento</h4><a href="mailto:contato@quantumdrive.com">contato@quantumdrive.com</a><a href="#/" data-ancora="como">Como funciona</a><a href="#/" data-ancora="economia">Calculadora de economia</a></div>
+      <div><h4>Atendimento</h4><a href="#/app" class="link-app">📲 Baixar o app</a><a href="mailto:contato@quantumdrive.com">contato@quantumdrive.com</a><a href="#/" data-ancora="como">Como funciona</a><a href="#/" data-ancora="economia">Calculadora de economia</a></div>
     </div>
     <div class="copy"><span>© 2026 Quantum Drive — Aluguel inteligente de carros elétricos.</span><span>Fotos: BYD Brasil. Consumo: calculadora de economia BYD 2026. Demais fichas técnicas aproximadas.</span></div>
   </div>
@@ -748,7 +855,7 @@ body.daltonico{filter:hue-rotate(35deg);}
   <button id="btnAcess" aria-expanded="false" aria-label="Opções de acessibilidade" title="Acessibilidade" onclick="const a=document.getElementById('acessibilidade');this.setAttribute('aria-expanded',a.classList.toggle('aberta'))">♿</button>
   <div class="opcoes">
   <button onclick="abrirLibras()" style="background:#1351b4">🤟 Libras (VLibras)</button>
-  <button id="btnDaltonico" aria-pressed="false" onclick="toggleDaltonico()">Modo daltônico</button>
+  <button id="btnDaltonico" aria-pressed="false" aria-haspopup="dialog" onclick="escolherDaltonismo()">Modo daltônico</button>
   <button id="btnContraste" aria-pressed="false" onclick="toggleContraste()">Alto contraste</button>
   <button onclick="aumentarFonte()" aria-label="Aumentar fonte">A+</button>
   <button onclick="diminuirFonte()" aria-label="Diminuir fonte">A-</button>
@@ -1242,7 +1349,7 @@ function navegar(){
   if(r.nome==='admin' && s.papel!=='admin'){ toast('erro','Acesso negado','Somente o administrador acessa o painel. Entre com a conta de administrador.'); return irPara('#/admin-login'); }
   if((r.nome==='login'||r.nome==='cadastro') && s){ return irPara(s.papel==='admin' ? '#/admin' : '#/veiculos'); }
 
-  const vistas = {'admin-login':'v-admin-login', home:'v-home', login:'v-login', cadastro:'v-cadastro', veiculos:'v-veiculos', veiculo:'v-detalhes', reserva:'v-reserva', historico:'v-historico', admin:'v-admin'};
+  const vistas = {app:'v-app', 'admin-login':'v-admin-login', home:'v-home', login:'v-login', cadastro:'v-cadastro', veiculos:'v-veiculos', veiculo:'v-detalhes', reserva:'v-reserva', historico:'v-historico', admin:'v-admin'};
   const alvo = vistas[r.nome] || 'v-home';
   $$('.vista').forEach(v=>v.classList.toggle('ativa', v.id===alvo));
   $$('nav.principal a[data-rota]').forEach(a=>a.classList.toggle('ativo', a.dataset.rota===r.nome || (a.dataset.rota==='veiculos' && r.nome==='veiculo')));
@@ -1808,8 +1915,10 @@ function renderFinanceiro(el, reservas){
       .concat(meses.map(x=>[x.m,x.n,x.dias,x.aluguel,x.prot,x.desc,x.total,x.recebido,x.aReceber,x.cancelado]))
       .concat([['TOTAL',ano.n,ano.dias,ano.aluguel,ano.prot,ano.desc,ano.total,ano.recebido,ano.aReceber,ano.cancelado]]);
     const csv = '﻿' + linhas.map(l=>l.map((v,i)=>typeof v!=='number'?v:(i<=2?String(v):v.toFixed(2).replace('.',','))).join(';')).join('\n');
+    const nomeCsv = `financeiro_quantumdrive_${finAno}.csv`;
+    if(window.QuantumApp && QuantumApp.salvarArquivo){ QuantumApp.salvarArquivo(nomeCsv, csv, 'text/csv'); toast('ok','Planilha salva',`${nomeCsv} foi salvo na pasta Downloads do celular.`); return; }
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
-    a.download = `financeiro_quantumdrive_${finAno}.csv`; a.click();
+    a.download = nomeCsv; a.click();
     toast('ok','Planilha gerada',`financeiro_quantumdrive_${finAno}.csv (abre no Excel).`);
   };
   const ex = $('#finExemplo'); if(ex) ex.onclick = gerarExemplos;
@@ -2165,11 +2274,48 @@ setTimeout(()=>{ const sel = $('#calcTrilho [aria-selected=true]'); sel && $('#c
 let tamFonte = DB.get('fonte', 16);
 document.documentElement.style.fontSize = tamFonte+'px';
 function toggleContraste(){ const on=document.body.classList.toggle('contraste'); $('#btnContraste').setAttribute('aria-pressed',on); DB.set('contraste',on); }
-function toggleDaltonico(){ const on=document.body.classList.toggle('daltonico'); $('#btnDaltonico').setAttribute('aria-pressed',on); DB.set('daltonico',on); }
+/* ---------- Modo daltônico (4 tipos) ---------- */
+const TIPOS_DALT = {
+  '':     {nome:'Desligado',     desc:'Cores originais do Quantum Drive.',                     cores:['#00F5A0','#00D1FF','#FFB547','#FF5470']},
+  protan: {nome:'Protanopia',    desc:'Dificuldade para ver o vermelho.',                       cores:['#7CC4FF','#B452FF','#FFE600','#E8513F']},
+  deutan: {nome:'Deuteranopia',  desc:'Dificuldade para ver o verde — o tipo mais comum.',      cores:['#7CC4FF','#B452FF','#FFE600','#E8513F']},
+  tritan: {nome:'Tritanopia',    desc:'Dificuldade para ver o azul e o amarelo.',               cores:['#13ECDD','#EC13DD','#F8D5AA','#FF2E1A']},
+  acro:   {nome:'Acromatopsia',  desc:'Não enxerga cores: usa só claro/escuro, ícones e formas.',cores:['#FFFFFF','#C8C8C8','#8A8A8A','#FFFFFF']}
+};
+function aplicarDaltonismo(tipo){
+  if(!TIPOS_DALT[tipo]) tipo='';
+  Object.keys(TIPOS_DALT).forEach(k=>k && document.body.classList.remove('dalt-'+k));
+  document.body.classList.toggle('dalt', !!tipo);
+  if(tipo) document.body.classList.add('dalt-'+tipo);
+  const b = $('#btnDaltonico');
+  b.setAttribute('aria-pressed', !!tipo);
+  b.textContent = tipo ? 'Daltonismo: '+TIPOS_DALT[tipo].nome : 'Modo daltônico';
+  DB.set('daltonismo', tipo);
+}
+function escolherDaltonismo(){
+  const atual = DB.get('daltonismo','');
+  $('#modalConteudo').innerHTML = `<h3>Modo daltônico</h3>
+    <p>Escolha o tipo. O site troca as cores por outras que você distingue e mostra ícones nos avisos e status.</p>
+    <div class="dalt-opcoes" role="radiogroup" aria-label="Tipo de daltonismo">
+      ${Object.entries(TIPOS_DALT).map(([k,t])=>`<button type="button" class="dalt-opcao" role="radio" aria-checked="${k===atual}" data-t="${k}">
+        <span><b>${t.nome}</b><small>${t.desc}</small></span>
+        <span class="dalt-amostra" aria-hidden="true">${t.cores.map(c=>`<i style="background:${c}"></i>`).join('')}</span></button>`).join('')}
+    </div>
+    <div class="modal-botoes"><button class="btn btn-sm" data-fechar>Fechar</button></div>`;
+  $('#modal').classList.add('aberto');
+  $$('#modalConteudo .dalt-opcao').forEach(b=>b.onclick=()=>{
+    aplicarDaltonismo(b.dataset.t);
+    $$('#modalConteudo .dalt-opcao').forEach(x=>x.setAttribute('aria-checked', x===b));
+    toast('ok','Modo daltônico', b.dataset.t ? TIPOS_DALT[b.dataset.t].nome+' ativado.' : 'Desligado: cores originais.');
+  });
+  $('#modalConteudo [data-fechar]').onclick = () => $('#modal').classList.remove('aberto');
+  ($('#modalConteudo [aria-checked=true]')||$('#modalConteudo .dalt-opcao')).focus();
+}
 function aumentarFonte(){ tamFonte=Math.min(22,tamFonte+1); document.documentElement.style.fontSize=tamFonte+'px'; DB.set('fonte',tamFonte); }
 function diminuirFonte(){ tamFonte=Math.max(13,tamFonte-1); document.documentElement.style.fontSize=tamFonte+'px'; DB.set('fonte',tamFonte); }
 if(DB.get('contraste',false)) toggleContraste();
-if(DB.get('daltonico',false)) toggleDaltonico();
+if(DB.get('daltonico',false) && DB.get('daltonismo',null)===null){ DB.set('daltonismo','deutan'); DB.set('daltonico',false); } // versão antiga
+aplicarDaltonismo(DB.get('daltonismo',''));
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') $('#modal').classList.remove('aberto'); });
 
 /* =====================================================================
@@ -2205,6 +2351,35 @@ setInterval(()=>{ if(rotaAtual.nome==='historico') renderHistorico(); }, 15000);
   }
   /* Se o botão oficial não aparecer em 4 s, mostra o botão de reserva */
   setTimeout(()=>{ if(!document.getElementById('vlibras-access-wrapper')) document.getElementById('librasReserva').hidden = false; }, 4000);
+</script>
+<script>
+/* ---------- App: instalação (PWA) e detecção do app Android ---------- */
+(function(){
+  const ua = navigator.userAgent;
+  const noApp = /QuantumDriveApp/.test(ua) || matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  if(noApp){ document.body.classList.add('no-app'); }
+  const ios = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+  const android = /Android/.test(ua);
+  function marcarPagina(){
+    const ja = document.getElementById('appJaInstalado'); if(ja) ja.hidden = !noApp;
+    document.getElementById('cardIphone').classList.toggle('destaque', ios);
+    document.getElementById('cardAndroid').classList.toggle('destaque', android || (!ios && !android));
+    if(ios) document.querySelector('.app-grid').prepend(document.getElementById('cardIphone'));
+  }
+  marcarPagina();
+  // Android/Chrome: botão de instalar pelo navegador
+  let pedido = null;
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); pedido = e; document.getElementById('btnInstalarPwa').hidden = false; });
+  document.getElementById('btnInstalarPwa').onclick = async () => {
+    if(!pedido) return; pedido.prompt(); const r = await pedido.userChoice; pedido = null;
+    document.getElementById('btnInstalarPwa').hidden = true;
+    if(r.outcome==='accepted') toast('ok','App instalado','O Quantum Drive está na sua tela inicial.');
+  };
+  // funciona offline depois da primeira visita
+  if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  }
+})();
 </script>
 </body>
 </html>

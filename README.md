@@ -12,3 +12,8 @@ Site de aluguel de carros 100% elétricos BYD.
 
 Protótipos das telas: https://lorranyam.github.io/QuantumDrive/prototipos/
 Versão anterior do site: https://lorranyam.github.io/QuantumDrive/versao-anterior/
+
+## App para celular
+- **Android:** baixe o APK em https://github.com/LorranyAm/QuantumDrive/releases/latest/download/QuantumDrive.apk
+  (código em Kotlin na pasta `android/`, compilado automaticamente pelo GitHub Actions).
+- **iPhone:** abra o site no Safari › Compartilhar › **Adicionar à Tela de Início** (app instalável/PWA).

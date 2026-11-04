@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.QuantumDrive" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/fundo</item>
+        <item name="android:statusBarColor">@color/fundo</item>
+        <item name="android:navigationBarColor">@color/fundo</item>
+        <item name="android:colorAccent">@color/verde</item>
+    </style>
+</resources>
