@@ -1,6 +1,6 @@
 name: App Android (APK)
 
-# Compila o app Android sempre que a pasta android/ muda (ou manualmente em Actions › Run workflow)
+# Compila o app nativo em Kotlin sempre que a pasta android/ muda (ou manualmente em Actions › Run workflow)
 on:
   push:
     branches: [main]
@@ -27,10 +27,16 @@ jobs:
         with:
           gradle-version: '8.10.2'
 
+      - name: Testes (mesmas regras do site)
+        run: |
+          set -o pipefail
+          gradle -p android testDebugUnitTest --no-daemon 2>&1 | tee testes.log
+
       - name: Compilar o APK
         env:
           QD_KEYSTORE_PASSWORD: ${{ secrets.QD_KEYSTORE_PASSWORD }}
         run: |
+          set -o pipefail
           if [ "$TEM_CHAVE" = "true" ]; then
             export QD_KEYSTORE_FILE="$GITHUB_WORKSPACE/android/assinatura/quantumdrive.jks"
             export QD_KEY_ALIAS=quantumdrive
@@ -39,27 +45,73 @@ jobs:
           else
             echo "::warning::Segredo QD_KEYSTORE_PASSWORD não cadastrado: APK de teste (não será publicado)."
           fi
-          gradle -p android assembleRelease -PnumeroBuild=${{ github.run_number }} --no-daemon --stacktrace
+          gradle -p android assembleRelease assembleDebug -PnumeroBuild=${{ github.run_number }} --no-daemon 2>&1 | tee build.log
           cp android/app/build/outputs/apk/release/app-release.apk QuantumDrive.apk
-          ls -la QuantumDrive.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk QuantumDrive-teste.apk
+          ls -la *.apk
 
-      - name: Guardar o APK (aba Actions)
+      - name: Mostrar erros de compilação
+        if: failure()
+        run: |
+          for f in testes.log build.log; do
+            [ -f "$f" ] || continue
+            grep -E "^e: |error:|FAILED|What went wrong|expected:<|AssertionError|Exception" -A2 "$f" | head -60 > erros.txt || true
+            split -l 6 erros.txt parte_ || true
+            for p in parte_*; do [ -f "$p" ] && echo "::error title=$f::$(sed ':a;N;$!ba;s/%/%25/g;s/\n/%0A/g' "$p")"; done
+            rm -f parte_* erros.txt
+          done
+
+      - name: Guardar os APKs
         uses: actions/upload-artifact@v4
         with:
           name: QuantumDrive-apk
-          path: QuantumDrive.apk
+          path: '*.apk'
 
       - name: Publicar para download
         if: env.TEM_CHAVE == 'true'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.${{ github.run_number }}
-          name: Quantum Drive para Android 1.0.${{ github.run_number }}
+          tag_name: v2.0.${{ github.run_number }}
+          name: Quantum Drive para Android 2.0.${{ github.run_number }}
           make_latest: true
           files: QuantumDrive.apk
           body: |
-            App Android do Quantum Drive — aluguel de carros 100% elétricos BYD.
+            App Android nativo do Quantum Drive (Kotlin + Jetpack Compose) — aluguel de carros 100% elétricos BYD.
 
             **Como instalar:** baixe o `QuantumDrive.apk` no celular, abra o arquivo e toque em **Instalar**.
             Se o Android pedir, ative **Permitir desta fonte** nas configurações.
             Para atualizar, é só instalar a versão nova por cima: suas reservas continuam salvas.
+
+  capturas:
+    needs: apk
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: QuantumDrive-apk
+
+      - name: Liberar aceleração do emulador
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+
+      - name: Tirar fotos das telas num celular virtual
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          profile: pixel_6
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: bash android/scripts/capturas.sh QuantumDrive-teste.apk capturas
+
+      - name: Publicar as fotos no ramo "capturas"
+        run: |
+          cd capturas
+          git init -q && git checkout -q -b capturas
+          git config user.name "github-actions" && git config user.email "github-actions@users.noreply.github.com"
+          git add -A && git commit -q -m "Capturas do app (build ${{ github.run_number }})"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" capturas

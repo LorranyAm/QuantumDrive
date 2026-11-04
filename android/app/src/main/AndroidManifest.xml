@@ -20,13 +20,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!-- Links do site abrem direto no app -->
-            <intent-filter android:autoVerify="false">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="lorranyam.github.io" android:pathPrefix="/QuantumDrive" />
-            </intent-filter>
         </activity>
     </application>
 </manifest>

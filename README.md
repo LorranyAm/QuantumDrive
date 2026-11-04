@@ -15,5 +15,6 @@ Versão anterior do site: https://lorranyam.github.io/QuantumDrive/versao-anteri
 
 ## App para celular
 - **Android:** baixe o APK em https://github.com/LorranyAm/QuantumDrive/releases/latest/download/QuantumDrive.apk
-  (código em Kotlin na pasta `android/`, compilado automaticamente pelo GitHub Actions).
+  App **nativo em Kotlin** (Jetpack Compose) na pasta `android/`, com as mesmas telas e regras do site;
+  compilado, testado e publicado automaticamente pelo GitHub Actions. Capturas das telas: ramo `capturas`.
 - **iPhone:** abra o site no Safari › Compartilhar › **Adicionar à Tela de Início** (app instalável/PWA).
