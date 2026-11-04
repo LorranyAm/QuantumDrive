@@ -153,11 +153,11 @@ fun TelaDetalhes(vm: QuantumViewModel, id: String, continuar: () -> Unit, voltar
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Spec("${c.autonomiaKm} km", "Autonomia", Modifier.weight(1f))
             Spec("${c.potenciaCv} cv", "Potência", Modifier.weight(1f))
-            Spec("${c.bateriaKwh} kWh", "Bateria", Modifier.weight(1f))
+            Spec("${num(c.bateriaKwh, 1)} kWh", "Bateria", Modifier.weight(1f))
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Spec(c.recarga.substringBefore(" em"), "Recarga rápida", Modifier.weight(1f))
-            Spec("${"%.2f".format(c.kmPorKwh)} km/kWh", "Consumo (BYD)", Modifier.weight(1f))
+            Spec(num(c.kmPorKwh, 2), "km/kWh (BYD)", Modifier.weight(1f))
             Spec("${c.lugares} · ${c.portaMalasL} L", "Lugares · malas", Modifier.weight(1f))
         }
         BarraAutonomia(c.autonomiaKm)

@@ -135,7 +135,7 @@ fun TelaEconomia(vm: QuantumViewModel, abrirCarro: (String) -> Unit) {
 
     // Só lê os valores (sem mexer no estado): seguro para usar enquanto a tela é desenhada
     fun lerKm() = km.filter(Char::isDigit).toIntOrNull() ?: 0
-    fun lerGasolina() = gasolina.replace(".", "").replace(',', '.').filter { it.isDigit() || it == '.' }.toDoubleOrNull() ?: 0.0
+    fun lerGasolina() = gasolina.replace(".", "").filter { it.isDigit() || it == '.' }.toDoubleOrNull() ?: 0.0
     fun errosDe(k: Int, g: Double) = buildMap {
         if (k !in 1..200000) put("km", "Informe quantos km você roda por ano (ex.: 20000).")
         if (g <= 0 || g > 20) put("gas", "Informe o preço da gasolina (ex.: 6,29).")
@@ -197,19 +197,19 @@ fun TelaEconomia(vm: QuantumViewModel, abrirCarro: (String) -> Unit) {
                         Text(m.nome, fontWeight = FontWeight.Black, fontSize = 20.sp, modifier = Modifier.weight(1f))
                         Selo(if (m.eletrico) "100% elétrico" else "Super híbrido", if (m.eletrico) p.verde else p.azul)
                     }
-                    Text(if (m.eletrico) "Consumo: ${"%.2f".format(m.kmPorKwh)} km/kWh · comparado com ${m.comparativos.joinToString { "${it.nome} (${"%.1f".format(it.kmL)} km/L)" }}"
-                         else "Modo elétrico: ${"%.2f".format(m.kmPorKwh)} km/kWh · modo combustão: ${"%.1f".format(m.kmPorLitro)} km/L · ${(fracao * 100).toInt()}% elétrico",
+                    Text(if (m.eletrico) "Consumo: ${num(m.kmPorKwh, 2)} km/kWh · comparado com ${m.comparativos.joinToString { "${it.nome} (${num(it.kmL, 1)} km/L)" }}"
+                         else "Modo elétrico: ${num(m.kmPorKwh, 2)} km/kWh · modo combustão: ${num(m.kmPorLitro, 1)} km/L · ${(fracao * 100).toInt()}% elétrico",
                         color = p.cinza2, fontSize = 12.sp)
                     FotoCarro(m.foto, m.nome, Modifier.fillMaxWidth().height(170.dp))
-                    CardValor("⚡", "${m.nome} — custo anual estimado", "Cálculo estimado com base no seu uso anual", brl(r.custoByd), "Rodagem anual: ${"%,d".format(v.first).replace(',', '.')} km", Color.White)
-                    CardValor("⛽", "Carro a combustão (média ref.)", "Consumo médio de veículos a combustão", brl(r.custoCombustao), "Média: ${"%.1f".format(r.refKmL)} km/L", p.erro)
+                    CardValor("⚡", "${m.nome} — custo anual estimado", "Cálculo estimado com base no seu uso anual", brl(r.custoByd), "Rodagem anual: ${milhar(v.first)} km", Color.White)
+                    CardValor("⛽", "Carro a combustão (média ref.)", "Consumo médio de veículos a combustão", brl(r.custoCombustao), "Média: ${num(r.refKmL, 1)} km/L", p.erro)
                     CardValor("💰", "Economia estimada por ano", "Comparação entre um carro a combustão e o seu BYD", brl(r.economia),
                         "${Math.round(r.percentual * 100)}% de economia estimada · ≈ ${brl(r.economia / 12)} por mês", p.lima, destaque = true)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Kpi("% de economia", "${Math.round(r.percentual * 100)}%", Modifier.weight(1f), p.verde)
-                        Kpi("Eficiência vs. combustão", "${"%.2f".format(r.eficiencia)}×", Modifier.weight(1f), p.verde)
+                        Kpi("Eficiência vs. combustão", "${num(r.eficiencia, 2)}×", Modifier.weight(1f), p.verde)
                     }
-                    Kpi("Equivalente de consumo no modo elétrico", "${"%.1f".format(r.equivalenteKmL)} km/L", cor = p.verde)
+                    Kpi("Equivalente de consumo no modo elétrico", "${num(r.equivalenteKmL, 1)} km/L", cor = p.verde)
                     if (m.idFrota != null) BotaoQuantum("Alugar este modelo", Modifier.fillMaxWidth()) { abrirCarro(m.idFrota) }
                     else Text("Modelo ainda não disponível na frota Quantum Drive.", color = p.cinza2)
                 }

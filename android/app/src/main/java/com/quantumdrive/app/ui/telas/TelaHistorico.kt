@@ -64,7 +64,7 @@ fun TelaHistorico(vm: QuantumViewModel, novaReserva: () -> Unit, alugarDeNovo: (
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Kpi("Concluídas", "${minhas.count { it.status == StatusReserva.CONCLUIDA }}", Modifier.weight(1f))
                     Kpi("Km elétricos possíveis",
-                        "%,d".format(minhas.filter { it.status != StatusReserva.CANCELADA }.sumOf { r -> frota.find { it.id == r.carroId }?.autonomiaKm ?: 0 }).replace(',', '.'),
+                        milhar(minhas.filter { it.status != StatusReserva.CANCELADA }.sumOf { r -> frota.find { it.id == r.carroId }?.autonomiaKm ?: 0 }),
                         Modifier.weight(1f), p.azul)
                 }
             }

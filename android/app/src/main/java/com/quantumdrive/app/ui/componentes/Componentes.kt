@@ -46,6 +46,11 @@ import java.util.Locale
 
 private val formatoBrl: NumberFormat = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
 fun brl(v: Number): String = formatoBrl.format(v.toDouble())
+private val ptBR = Locale("pt", "BR")
+/** Número no formato brasileiro (vírgula decimal), ex.: num(82.5, 1) = "82,5". */
+fun num(v: Double, casas: Int): String = String.format(ptBR, "%.${casas}f", v)
+/** Inteiro com ponto de milhar, ex.: milhar(20000) = "20.000". */
+fun milhar(v: Int): String = String.format(ptBR, "%,d", v)
 val fmtDataHora: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
 val fmtCurto: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM HH:mm")
 
