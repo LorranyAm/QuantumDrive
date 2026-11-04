@@ -5,6 +5,8 @@ APK="$1"; OUT="$2"; mkdir -p "$OUT"
 adb install -r "$APK"
 adb shell settings put global window_animation_scale 0
 adb shell settings put global transition_animation_scale 0
+adb shell settings put global anr_show_background 0
+sleep 20  # deixa o celular virtual terminar de ligar
 tela() { # nome rota perfil [aba] [dalt]
   local extras="--es rota $2"
   [ -n "${3:-}" ] && extras="$extras --es perfil $3"
@@ -12,6 +14,9 @@ tela() { # nome rota perfil [aba] [dalt]
   [ -n "${5:-}" ] && extras="$extras --es dalt $5"
   adb shell am start -S -W -n com.quantumdrive.app/.MainActivity $extras >/dev/null
   sleep "${ESPERA:-7}"
+  # fecha avisos do próprio celular virtual (ex.: "Pixel Launcher isn't responding")
+  adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS >/dev/null 2>&1
+  sleep 1
   adb exec-out screencap -p > "$OUT/$1.png"
   echo "capturada: $1"
 }
