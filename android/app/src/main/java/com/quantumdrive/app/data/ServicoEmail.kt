@@ -82,8 +82,19 @@ object ServicoEmail {
                     con.connectTimeout = 15000; con.readTimeout = 15000
                     con.setRequestProperty("Content-Type", "application/json")
                     con.outputStream.use { it.write(corpo.toByteArray()) }
-                    if (con.responseCode !in 200..299) error("EmailJS ${con.responseCode}")
+                    if (con.responseCode !in 200..299) {
+                        val motivo = runCatching { con.errorStream?.bufferedReader()?.readText() }.getOrNull().orEmpty()
+                        error("${con.responseCode} ${motivo.take(160)}")
+                    }
                 } finally { con.disconnect() }
-            }.fold(onSuccess = { "EmailJS" }, onFailure = { "falhou" })
+            }.fold(onSuccess = { "EmailJS" }, onFailure = { e ->
+                // Guarda o motivo (aparece em "E-mails" no painel e no histórico)
+                val m = e.message.orEmpty()
+                when {
+                    "non-browser" in m -> "falhou: o EmailJS bloqueia o app — ative \"Allow EmailJS API for non-browser applications\" (Account › Security)"
+                    e is java.net.UnknownHostException || e is java.net.SocketTimeoutException -> "falhou: sem internet"
+                    else -> "falhou: $m"
+                }
+            })
         }
 }

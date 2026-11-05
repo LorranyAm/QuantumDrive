@@ -86,7 +86,7 @@ class QuantumViewModel(app: Application) : AndroidViewModel(app) {
             val via = repo.cadastrar(nome, email, tel, cpf, nasc, senha)
             avisar(Aviso(Aviso.Tipo.SUCESSO, "Conta criada com sucesso!",
                 if (via == "EmailJS") "Enviamos a confirmação para ${email.trim()}. Confira também o spam."
-                else "Bem-vindo(a), ${primeiroNome(nome)}! (O e-mail de confirmação não saiu: confira a internet.)"))
+                else "Bem-vindo(a), ${primeiroNome(nome)}! O e-mail de confirmação não saiu — ${via.removePrefix("falhou: ")}."))
             aoCriar()
         } catch (e: ErroApi) { aoErrar(e.campo, e.message ?: ""); erro("Não foi possível cadastrar", e) }
     }
@@ -140,7 +140,7 @@ class QuantumViewModel(app: Application) : AndroidViewModel(app) {
             val (nova, via) = repo.criarReserva(r)
             rascunhoInicio = null; rascunhoFim = null
             avisar(Aviso(Aviso.Tipo.SUCESSO, "Reserva ${nova.id} enviada!",
-                if (via == "EmailJS") "Enviamos os detalhes para ${nova.email}. Confira também o spam." else "Acompanhe o status em Minhas reservas."))
+                if (via == "EmailJS") "Enviamos os detalhes para ${nova.email}. Confira também o spam." else "O e-mail não saiu — ${via.removePrefix("falhou: ")}."))
             aoConcluir()
             agendarConfirmacao(nova.id)
         } catch (e: ErroApi) { aoErrar(e.message ?: ""); erro("Reserva não concluída", e) }
@@ -159,7 +159,7 @@ class QuantumViewModel(app: Application) : AndroidViewModel(app) {
         try {
             val via = repo.mudarStatus(id, s, motivo)
             avisar(Aviso(Aviso.Tipo.SUCESSO, "Status de $id: ${s.rotulo}",
-                when (via) { "EmailJS" -> "Cliente avisado por e-mail."; "exemplo" -> "Reserva de exemplo (sem e-mail)."; else -> "O e-mail não saiu: confira a internet." }))
+                when (via) { "EmailJS" -> "Cliente avisado por e-mail."; "exemplo" -> "Reserva de exemplo (sem e-mail)."; else -> "O e-mail não saiu — ${via.removePrefix("falhou: ")}." }))
         } catch (e: ErroApi) { erro("Falha ao atualizar", e) }
     }
 
