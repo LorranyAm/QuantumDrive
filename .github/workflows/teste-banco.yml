@@ -1,0 +1,21 @@
+name: Teste do banco PIM IV
+on:
+  push:
+    branches: [teste-banco-pim4]
+jobs:
+  mysql:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        versao: ['8.0', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Subir MySQL ${{ matrix.versao }} (sql_require_primary_key=ON, log binário ligado, como na Aiven)
+        run: |
+          docker run -d --name db -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 mysql:${{ matrix.versao }} \
+            --sql-require-primary-key=ON --log-bin=binlog --default-time-zone=+00:00
+          for i in $(seq 1 60); do docker exec db mysqladmin -uroot -proot ping --silent 2>/dev/null && break; sleep 2; done
+          sleep 5
+      - name: Rodar testes
+        run: bash ci.sh
